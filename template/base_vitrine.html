@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- <link rel="stylesheet" type="text/css" href="/wiki/static/css/style.css"/> -->
+<link rel="stylesheet" type="text/css" href="/users/static/css/tsi-vitrine.css"/>
+{% block head_css %}{% endblock %}
+
+
+<script type="text/javascript" src="/users/static/js/search.js"></script>
+<script type="text/javascript" src="/users/static/js/popup.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{% block head_js %}{% endblock %}
+
+<link rel="shortcut icon" type="image/x-icon" href="/users/static/images/favicon.ico" />
+
+<title>{% block head_title %}PLATO{% endblock %}</title></head>
+
+<body>
+
+  
+  <div id="wrapper"> 
+		
+		<!-- Header -->  
+		<div id="container-title">
+			<table id="logoarea" cellpadding="0" cellspacing="0" border="0" width="100%" height="75px">
+				<tr>
+				  <td valign="top" class="logoarea-logo">
+					<a href="/"><img src="/users/static/images/plato_ico.png" alt="Plato logo" height="75" style="border:none" longdesc="home" /></a>
+				  </td>
+				  <td valign="top" class="logoarea-title" style="padding:0 0 0 10px;">
+					<h1 class="blogtitle">PLATO </h1><p class="tagline"> Plate-forme TSI Online </p>
+				  </td>
+				  <td valign="bottom" class="search-box" align="right">
+					<form name="search" action="/search" method="get">{% csrf_token %}
+					  <input id="search_text" type="text" name="search_text">
+					  {%if request.session.lang == 'en'%}<input type="submit" value="Search" >
+					  {%else%} <input type="submit" value="Chercher" > {%endif%}
+					</form>
+				  </td>
+				<td valign="bottom" class="search-box" align="right" width="10px">
+				  <select onchange="window.location.href='/users/change_lang?value='+this.value;">
+					  <option value="en" {%if request.session.lang == 'en'%}selected{%endif%}>En</option>
+					  <option value="fr" {%if request.session.lang == 'fr'%}selected{%endif%}>Fr</option> 
+					</select>
+				  </td>
+				</tr>
+			</table>
+			
+		</div>
+		<!-- /Header -->  
+
+
+		<!-- Menu -->  
+		<div id="container-menu">
+				  {%if request.session.lang == 'en'%}
+				  {%include "menu.html"%}
+				  {%else%}
+				  {%include "menu_fr.html"%}
+					{%endif%}
+		</div>
+		<!-- /Menu -->  
+
+	  <!-- Main Body -->	
+	  <div id="container"> 	
+		  <div class="post-headline"><h1>{% block title %}{% endblock %}</h1>
+		  </div>	
+		  {% block content %}
+		  {% endblock %}
+		</div> 
+	  <!-- / Main Body -->
+
+ 
+  <!-- </div><\!-- / wrapper -\->  -->
+  <!-- 	 		<\!-- Footer -\->  -->
+  <!-- 		<div id="container-footer"> 	 -->
+  <!-- 					<div id="info" style="text-align:center;"> -->
+  <!-- 				  <a target="parent" width=100 href="http://www.mines-telecom.fr/fr_accueil.html"> -->
+  <!-- 				  <img src="/users/static/images/logo.png"> -->
+  <!-- 				  </a> -->
+  <!-- 					</div> -->
+  <!-- 		  <address> -->
+  <!-- 		  <a href="http://www.telecom-paristech.fr/" target="_blanc">TELECOM ParisTech</a> | -->
+  <!-- 		  <a href="http://www.mines-telecom.fr/" target="_blanc"> Institut TELECOM </a> | -->
+  <!-- 		  <a href="http://www.tsi.telecom-paristech.fr/" target="_blanc"> TSI </a> -->
+  <!-- 		  </address> -->
+  <!-- 		  <br> -->
+  <!-- 		  </div> -->
+
+{% if GOOGLE_ANALYTICS_PROPERTY_ID %}
+  {% include "ga.html" %}
+{% endif %}
+</body> 
+</html>
+
+  

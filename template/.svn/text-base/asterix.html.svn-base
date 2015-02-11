@@ -1,0 +1,7 @@
+<p align="center">
+{%if request.session.lang == 'en'%}
+Fields marked with an asterisk are required
+{%else%}
+Les champs marqués d'une astérisque sont obligatoires
+{%endif%}
+</p>

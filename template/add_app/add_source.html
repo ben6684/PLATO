@@ -1,0 +1,51 @@
+{%extends 'base.html'%}
+{% block head_title %}{%if request.session.lang == 'en'%}Add Tool{%else%}Ajoutez un outil{%endif%} {% endblock %}
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+
+{%block title%} {%if request.session.lang == 'en'%}Add Tool{%else%}Ajoutez un outil{%endif%}{%endblock%}
+{%autoescape off%}
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+{%include "asterix.html"%}
+<br>
+
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url add_app%}" method="post">{% csrf_token %}
+
+  <table align="center">
+	<tr> <th>* {%if request.session.lang == 'en'%}Files{%else%}Fichiers{%endif%}</th><td><input type="file" name="files" multiple="multiple"/><td></tr>
+	{%for field in form%}
+	{%if field.label == "Authors" or field.label == "Auteurs" %}
+	<tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>
+	<div id="autocomplete_author_choices" class="autocomplete"></div>
+	<script>new Ajax.Autocompleter("id_form_algo-author", "autocomplete_author_choices", "{%url autoAuthor2%}", { tokens: ','});</script>
+	{%elif field.label == "Keywords" or field.label == "Mots clefs" %}
+	<tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>
+	<div id="autocomplete_KW_choices" class="autocomplete"></div>
+	<script>new Ajax.Autocompleter("id_form_algo-KW", "autocomplete_KW_choices", "{%url autoKW 'form_algo'%}", { tokens: ','});</script>
+	{%else%}
+	<tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>	
+	{%endif%}
+	{%endfor%}
+			<tr><th><a href="#" onclick="publi_code()">Linked to publications ?</a></th><td></td></tr>
+			<tbody id="publicode" style="display:none"></tbody>
+			<tr><th><a href="#" onclick="demo_code()">Linked to demos ?</a></th><td></td></tr>
+			<tbody id="democode" style="display:none"></tbody>
+			<tr><th><a href="#" onclick="ensfile_code()">Linked to medias ?</a></th><td></td></tr>
+			<tbody id="ensfilecode" style="display:none"></tbody>
+	<tr> <th>{%if request.session.lang == 'en'%}Add media files{%else%}Ajoutez des fichiers mutimédias{%endif%}</th><td><input type="file" name="figures" multiple="multiple" onchange="previmg(this)"//><td></tr>
+	  <tbody id="img_preview"></tbody>
+	
+  </table>
+{%include "validate.html"%}
+</form>
+</div>
+
+
+{%endblock%}
+{%endautoescape%}

@@ -1,0 +1,11 @@
+<div id="contentbox">
+	<p align="center">Authorisation : by default, evryone get an acces to downloadable content</p>
+	<hr>
+	<table align="center">
+	  <tr><th>{{form_auth.all_f.label_tag}}</th><td>{{form_auth.grp}}</td>
+	  <td>{{form_auth.usr}}</td></tr>
+	  <td> {{form_auth.all_f}}</td>
+	  <td>{{form_auth.grp_f}}</td>
+	  <td>{{form_auth.usr_f}}</td></tr>
+	</table>
+ </div>

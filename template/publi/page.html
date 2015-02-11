@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+  {%load plato_extras%}
+  {% block head_title %} PLATO {% endblock %}
+
+  {%block head_js%} 
+  <script type="text/javascript" src="/users/static/js/del.js"></script> 
+  <script type="text/javascript" src="/users/static/js/util.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script type="text/javascript" src="/users/static/js/highslide/highslide.js"></script>
+  <script type="text/javascript" src="/users/static/js/highslide/highslide.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/glMatrix-0.9.5.min.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/webgl-utils.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/camera.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/pointset.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl.js"></script>
+  <script type="text/javascript" src="/users/static/js/viewer.js"></script>
+  <script type="text/javascript">
+    hs.graphicsDir = '/users/static/js/highslide/graphics/';
+  </script> 
+  <script id="shader-fs" type="x-shader/x-fragment">
+	precision mediump float;
+
+	//varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
+	varying vec3 normal;
+
+	uniform float uAlpha;
+
+	//uniform sampler2D uSampler;
+
+	uniform bool uUseTexturing;
+	uniform bool uSmoothedPoint;
+	uniform bool uPointSet;
+
+	void main(void) {
+    vec4 textureColor = vec4(1., 1., 1., 1.);
+
+    if(uPointSet)
+    {
+	if(uSmoothedPoint)
+	{
+	float r = (gl_PointCoord.s-0.5)*(gl_PointCoord.s-0.5)
+	+ (gl_PointCoord.t-0.5)*(gl_PointCoord.t-0.5);
+	r = 1.-4.*r;
+	if(r<0.0) discard;
+	}
+    }
+	gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+	}
+
+  </script>
+
+  <script id="shader-vs" type="x-shader/x-vertex">
+	attribute vec3 aVertexPosition;
+	attribute vec3 aVertexNormal;
+	//attribute vec2 aTextureCoord;
+
+	uniform mat4 uMVMatrix;
+	uniform mat4 uPMatrix;
+	uniform mat3 uNMatrix;
+
+	uniform vec3 uAmbientColor;
+
+	uniform vec3 uLightingDirection;
+	uniform vec3 uDirectionalColor;
+	uniform vec3 uLightingDirection2;
+	uniform vec3 uDirectionalColor2;
+
+	uniform bool uUseLighting;
+
+	uniform float uPointSize;
+
+	//varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
+	varying vec3 normal;
+
+
+
+
+
+
+	void main(void) {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_PointSize = uPointSize;
+    //vTextureCoord = aTextureCoord;
+
+    if (!uUseLighting) {
+	vLightWeighting = vec3(1.0, 1.0, 1.0);
+    } else {
+	vec3 transformedNormal = uNMatrix * aVertexNormal;
+	normal = transformedNormal;
+	float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+	float directionalLightWeighting2 = max(dot(transformedNormal, uLightingDirection2), 0.0);
+	vec3 uLightingDirection3 = vec3(-438., 167., -48.);
+	uLightingDirection3 = normalize(uLightingDirection3);
+	vec3 uDirectionalColor3 = vec3(1.0, 0.69, 0.23);
+	float directionalLightWeighting3 = max(dot(transformedNormal, uLightingDirection3), 0.0);
+	vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting
+	+ uDirectionalColor2 * directionalLightWeighting2
+	+ uDirectionalColor3 * directionalLightWeighting3;
+	vLightWeighting.r = vLightWeighting.r>1.0?1.0:vLightWeighting.r;
+	vLightWeighting.g = vLightWeighting.g>1.0?1.0:vLightWeighting.g;
+	vLightWeighting.b = vLightWeighting.b>1.0?1.0:vLightWeighting.b;
+    }
+	}
+  </script>
+  {%endblock%}
+
+  {%block head_css%}
+  <link rel="stylesheet" type="text/css" href="/users/static/js/highslide/highslide.css" />
+	{%endblock%}
+
+	{% block content %}
+	<br>
+	  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+	  <div id="contenbox">
+		<div id="titre"> {{page.titre}}</div>
+		<div id="author">{%for a in page.author.all%}
+		  {% if not forloop.last %}
+		  {%if a.id_user%}
+		  <a href="{%url usr a.id_user.login%}">{{a.fstnm}} {{a.nm}},</a>
+		  {%else%}
+		  {{a.fstnm}} {{a.nm}},
+		  {% endif %}
+		  {% else %}
+		  {%if a.id_user%}
+		  <a href="{%url usr a.id_user.login%}">{{a.fstnm}} {{a.nm}}</a>
+		  {% else %}
+		  {{a.fstnm}} {{a.nm}}
+		  {% endif %}
+		  {% endif %}
+		  {%endfor%}</div><br>
+		  <div id="conf">
+			{%ifequal page.id_conf 'None'%}{{page.id_conf.titre_conf}} {{page.annee}} {%else%} {{page.conf_raw}}{%endifequal%}</div>
+		  <br><b>{%if request.session.lang == 'en'%}Abstract{%else%}Résumé{%endif%} :</b><br><br>
+				<div id="abstract"> {{page.abstract}}  </div>
+				<br>
+				  {%if request.session.lang == 'en'%}Keywords{%else%}Mots Clefs{%endif%} :	 {%for kp in page.KW.all%}<a href="/search?KW={{kp}}"> {{kp}}</a>, {%endfor%} 
+				  <br>
+				
+			  {%if flag%}<input type="button" onclick="self.location.href='{%url upd_page page.id_page%}'" value="{%if request.session.lang == 'en'%}Modify{%else%}Modifier{%endif%}" /> {%endif%}
+<br>
+
+					  
+					  {%if page_fig%}
+					  <div id="algo"><h2>Figures</h2></div>
+					  <div class="galerie">
+						
+						
+						{%regroup page_fig by type_file as type_figures%}
+						{%for figures in type_figures%}
+
+						{%if figures.grouper.id_type_file == 1%} <!--it's images -->
+						<h3>Images</h3>
+						{%for i in figures.list%}
+						<div class="figurebox" >
+						  <a href="/root/{{i.path}}" class="highslide"  onclick="return hs.expand(this)"> 	
+							<img src="/root/{{i.show_thumb}}" height="150" id="{{i.id_file}}">
+						  </a> 	
+						  <div class='highslide-caption' id="caption-for-{{i.id_file}}">
+							{%if i.get_publi_caption%}{{i.get_publi_caption}}{%endif%}
+						  </div>
+						  <br><div class="captionbox">{%if i.get_publi_caption%}{{i.get_publi_caption}}{%endif%}</div>
+						</div>
+						{%endfor%}
+
+						{%elif figures.grouper.id_type_file == 2%} <!--it's sounds -->
+						<h3>{%if request.session.lang == 'en'%}Sounds{%else%}Sons{%endif%}</h3>
+						{%for i in figures.list%}
+						<audio controls="controls" src="/root/{{i.path}}"> </audio>
+						<br><div class="captionbox">{%if i.get_publi_caption%}{{i.get_publi_caption}}{%endif%}</div>
+						  {%endfor%}
+						  {%elif figures.grouper.id_type_file == 3%} <!--it's videos -->
+						  <h3>Vidéos</h3>
+						  {%for i in figures.list%}
+						  <video width="320" height="240" controls="controls" src="/root/{{i.path}}"> </video>
+						  <br><div class="captionbox">{%if i.get_publi_caption%}{{i.get_publi_caption}}{%endif%}</div>
+							{%endfor%}
+							{%elif figures.grouper.id_type_file == 4%} <!--it's 3D -->
+							<h3>{%if request.session.lang == 'en'%}3D objects{%else%}Objets 3D{%endif%}</h3>
+
+							<div style="display:inline-block;padding:0px 5px 5px 5px;">
+							  <div id="filenoption" style="text-align:left;display:inline-block;vertical-align:top;margin-top:40px;">
+								<h4 style="color:#990000;"> Files </h4>
+								{%for i in figures.list%}
+								<a href="/util/download/{{i.id_file}}"> {{i.name_file}}</a>
+								<input type="button" onclick="initViewer('/root/{{i.path}}')" value="click for 3D">
+								  <br>{%if i.get_publi_caption%}<div class="captionbox">{{i.get_publi_caption}}</div>{%endif%}
+									{%endfor%}
+									<h4 style="color:#990000;"> Options </h4>
+									<ul>
+									  <li><input type="checkbox" id="pointSet" checked />PointSet</li>
+									  <li><input type="checkbox" id="smoothedPoint" checked /> Smoothed point</li>
+									  <li>Point Size <input type="text" id="pointSize" value="1.0" /></li>
+									</ul>
+							  </div>
+							  <div id="viewer" onresize="updateGL()">
+								<canvas id="viewer-canvas"></canvas>
+							  </div>
+							</div>
+							{%else%}
+							<h3>{%if request.session.lang == 'en'%}Other files{%else%}Autres fichiers{%endif%}</h3>
+							{%for i in figures.list%}
+							<a href="/util/download/{{i.id_file}}"><img src="/users/static/images/f_pdf.png"></a><br><div class="captionbox"> {{i.name_file}}{%if i.get_publi_caption%}<br> {{i.get_publi_caption}}{%endif%} </div>
+							  {%endfor%}
+							  {%endif%}
+
+
+							  {%endfor%}
+
+					  </div>			  
+	  </div>
+	  {%endif%}
+  <div id="algo"> <!-- Downloadable content -->
+		<h2>Bibtex</h2><br> 
+		  @{{page.type_page}}{% templatetag openbrace %}{%for a in page.author.all%}{{a.nm.strip}}{%endfor%}{{page.annee|slice:"0:-2"}},<br>
+			author={% templatetag openbrace %}{%for a in page.author.all%}{{a.fstnm_i}}. {{a.nm}} and {% if forloop.last %}{{a.fstnm_i}}. {{a.nm}}{%endif%}{%endfor%}{% templatetag closebrace %},<br>
+			  title={% templatetag openbrace %}{{page.titre}}{% templatetag closebrace %},<br>
+				journal={% templatetag openbrace %}{{page.conf_raw}}{% templatetag closebrace %},<br>
+				  {%if page.publisher%}publisher={% templatetag openbrace %}{{page.publisher}}{% templatetag closebrace %},<br>{%endif%}
+					{%if page.volume%}volume={% templatetag openbrace %}{{page.volume}}{% templatetag closebrace %},<br>{%endif%}
+					  {%if page.number%}number={% templatetag openbrace %}{{page.number}}{% templatetag closebrace %},<br>{%endif%}
+						{%if page.pages%}pages={% templatetag openbrace %}{{page.pages}}{% templatetag closebrace %},<br>{%endif%}
+						  {%if page.annee%}year={% templatetag openbrace %}{{page.annee}}{% templatetag closebrace %},<br>{%endif%}
+							{%if page.mon%}month={% templatetag openbrace %}{{page.mon|month_name}}{% templatetag closebrace %},<br>{%endif%}
+							  {%if page.lieu%}adress={% templatetag openbrace %}{{page.lieu}}{% templatetag closebrace %},<br>{%endif%}
+								
+								}
+	  </div>
+
+
+	  {%if page.tool.all%}
+	  <div id="algo"><!-- Algorithm content -->
+		<h2> {%if request.session.lang == 'en'%}Related Tools{%else%}Outils associés{%endif%} </h2>
+	  </div>
+	  {%for tool in page.tool.all%}
+	  {%if tool%}
+	  {%if tool.visible or request.session.login%}
+	  
+	  <div id="object">
+		<h3><a href="{%url vcode tool.id_tool%}">{{tool.name_tool}} </a></h3>
+		<div id="objectlogo">
+		  <a href="{%url vcode tool.id_tool%}">	<img src="/users/static/images/application.png"></a>
+		</div>
+		<div id="objectcontentmore" style="width=15%;margin=40px 15px 15px 0px">
+		  <ul>
+			{%if tool.webpage_tool%}<li> {%if request.session.lang == 'en'%}Webpage{%else%}Page web{%endif%} : {{tool.webpage_tool}}</li>{%endif%}
+			{%if tool.manager%}<li> {%if request.session.lang == 'en'%}Manager{%else%}Gérant{%endif%} : <a href="{%url usr tool.manager.login%}">{{tool.manager.fstnm_person}} {{tool.manager.nm_person}}</a> </li>{%endif%}
+			{%if tool.type_tool%} <li>{%if request.session.lang == 'en'%}Tool type{%else%}Type d'outil{%endif%} :  {{tool.type_tool.nm_type_tool}}</li>{%endif%}
+			{%if tool.licence%}<li>{%if request.session.lang == 'en'%}License{%else%}Licence{%endif%} :  {{tool.licence.nm_license}}</li>{%endif%}
+			{%ifnotequal tool.date_creation None%}{%if request.session.lang == 'en'%}Creation date{%else%}Date de création{%endif%} : {{tool.date_creation}}<br>{%endifnotequal%}
+			  {%ifnotequal tool.date_creation|date:"jny" tool.date_modification|date:"jny"%} {%if request.session.lang == 'en'%}Last modification{%else%}Dernière modification{%endif%} : {{tool.date_modification}}<br>{%endifnotequal%}
+		  </ul>
+		</div>
+		<div id="objectcontent" style="width=85%;margin=40px 15px 15px 0px">
+		  {%ifnotequal tool.desc_tool None%} Description :{{tool.desc_tool|safe}}{%endifnotequal%}
+		</div>
+	  </div>
+	  {%endif%}
+	  {%endif%}
+	  {%endfor%}
+	  {%endif%}
+
+	  <!-- DEMO CONTENT -->
+	  {%if page.get_demos%}
+	  		<div id="algo"><h2>{%if request.session.lang == 'en'%}Related Demos{%else%}Démos liées{%endif%}</h2></div>
+				{%for demo in page.get_demos%}
+			  <div id="object">
+				<h3><a href="{%url vdemo demo.id_demo%}">{{demo}} </a></h3>
+				<div id="objectlogo">
+				  <img src="/users/static/images/demo.png">
+				</div>
+				<div id="soundcontentmore" style="margin:5px 0px 5px 75px;">
+				  {%if demo.desc_demo%}  Description : {{demo.desc_demo|safe}} {%endif%}
+				</div>
+				<div id="objectbottom">
+				  {%if request.session.lang == 'en'%}
+				  Created the <b>{{demo.date_creation|date:"j M Y"}}</b> by <a href="{%url usr demo.manager.login%}">{{demo.manager.fstnm_person}} {{demo.manager.nm_person}}</a> 
+		  {%else%}
+				  Créé le  <b>{{demo.date_creation|date:"j M Y"}}</b> par <a href="{%url usr demo.manager.login%}">{{demo.manager.fstnm_person}} {{demo.manager.nm_person}}</a> 
+				  {%endif%}
+				</div>
+			  </div>
+		  
+				{%endfor%}
+
+
+	  {%endif%}
+	  <!-- END DEMO CONTENT -->
+
+	  <!-- MEDIA CONTENT -->
+	  {%if page.ensfile.all%}
+	  <div id="algo"><h2>{%if request.session.lang == 'en'%}Related Media{%else%}Média liées{%endif%}</h2></div>
+	  {%for ef in page.ensfile.all%}
+	  <div id="object">
+		{%include 'choose_logo.html' with s=ef%}
+		{%include 'data/obj_infos.html' with s=ef%}
+	  </div>
+      {%endfor%}
+      {%endif%}
+	  <!-- END MEDIA CONTENT -->
+  
+	
+	  {%if page.id_article or page.id_presentation%}
+	  <div id="algo"> <!-- Downloadable content -->
+		<h2>{%if request.session.lang == 'en'%}Download content{%else%}Contenu téléchargeable{%endif%}</h2><br> 		
+		  <p style="text-align:center;">
+			{%if page.id_article %}
+			<a href="/util/download/{{page.id_article.id_file}}"><img src="/users/static/images/f_pdf.png"></a>
+			{%endif%}     
+			{%if page.id_presentation %}
+			<a href="/util/download/{{page.id_presentation.id_file}}"><img src="/users/static/images/prez.png"></a>
+			{%endif%}
+			<!--a href=# onclick="del_page({{page.id_page}})"><img src="/users/static/images/poubelle_1.png"></a-->
+			<br>
+			  {%if flag%}<a href="{%url upd_page page.id_page%}"> {%if request.session.lang == 'en'%}Modify{%else%}Modifier{%endif%} </a>{%endif%}
+		  </p>
+	  </div> <!-- End Downloadable Content-->
+	  {%endif%}
+	  
+	</div><!--End of contentbox -->
+	  <br>
+		{% endblock %}

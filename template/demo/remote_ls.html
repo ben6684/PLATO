@@ -1,0 +1,22 @@
+{% extends 'demo/demo_template.html' %}
+
+{%block titre%} remote ls {%endblock%}
+{%block autors%} paramiko {%endblock%}
+{%block description%}<p> Description : <br>do ls on petitpas' machine  <br></p>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}{%endblock%}
+<br>
+  {%block input%}
+
+ <form enctype="multipart/form-data" action="{%url remote_ls%}" method="post">{% csrf_token %}
+<div id="selection_input">
+<input type="submit" id="id_remote_ls" name="remote_ls" value="    Run    "/>
+</div>
+<div id="fiche" style="min-height:500px;">
+<div id="lefo">
+{{response|safe}} 
+</div> 
+</div> 
+
+</form>
+{%endblock%}
+  {%block resultat%} {%endblock%}

@@ -1,0 +1,43 @@
+
+  <h3>Menu</h3>
+  <div id="pages-3" class="widget widget_pages">
+	
+	<ul>
+	  <li class="page_item"><a href="{%url idx%}">Accueil</a></li>
+	  {%if request.session.actif%}
+	  {%if request.session.login%}
+	  <li class="page_item"><a href="{%url usr request.session.login%}">Mon compte</a></li>
+	  {%endif%}
+	  {%endif%}
+	  <br/>
+		<li class="page_item"><a href="{%url projects%}">Projets</a></li>
+		<li class="page_item"><a href="{%url usrs%}">Membres</a></li>
+		<br/>
+		  <li class="page_item"><a href="{%url sources_codes%}">Outils</a></li>
+		  <li class="page_item"><a href="{%url vpages%}">Publications</a></li>
+
+		  <li class="page_item"><a href="{%url vdemos%}">Démos</a></li>
+		  <li class="page_item"><a href="{%url data%}">Données</a>
+			<ul class="children">
+			  <li><a href="{%url audio%}">Audios</a></li>
+			  <li><a href="{%url image%}">Images</a> </li>
+			  <li><a href="{%url videos%}">Vidéos</a></li>
+			  <li><a href="{%url 3D%}">Objets 3D</a></li>
+			  <li><a href="{%url multimodal%}">Multimodales</a></li>
+			</ul>
+		  </li>	
+		  <br/>
+		  {%if request.session.actif%}
+		  {%if request.session.login%}
+			<li class="page_item"><a href="{%url add_data%}">Ajout de données</a></li>
+			<li class="page_item"><a href="{%url add_app%}">Ajout d'outil</a> </li>
+			<li class="page_item"><a href="{%url add_publi%}">Ajout d'une page compagnion</a></li>
+			<br/>
+			  <li><a href="{%url usr_ngrp request.session.login%}">Créez un projet</a></li>
+			  {%endif%}
+			  {%endif%}	
+			  <br/>
+				<li><a href="{%url help%}">Aide</a></li>
+				<li><a href="{%url start%}">Bien démarrer</a></li>
+	</ul>
+  </div>

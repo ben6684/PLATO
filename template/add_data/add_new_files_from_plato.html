@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+  {% block head_title %}{%if request.session.lang == 'en'%} Add data {%else%} Ajoutez des données {%endif%}{% endblock %}
+
+
+  {% block title %}
+  {%if request.session.lang == 'en'%}Fill form for data on PLATO{%else%}Remplir le formulaire pour des données déjà sur PLATO{%endif%}
+  {% endblock%}
+
+  {% block content %}
+  <br>
+	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+	{%include "asterix.html"%}
+	<br>
+	  {%if request.session.lang == 'en'%}
+	<p align="center"><b>The data HAVE TO be copied on /tsi/plato/plato_tmp/ and had readable and writable permission</b></p>
+	<br>
+	<p align="center"><b>The data must be in a <u>single</u> folder</b></p>
+	<br>
+	<p align="center"><b>The name of that folder have to be the <u>same</u> as the name filled below</b></p>
+	<br>
+			{%else%}
+	<p align="center"><b>Les données DOIVENT impérativement être copiées sur /tsi/plato/plato_tmp/ et être accessibles en lecture et écriture</b></p>
+	<br>
+	<p align="center"><b>Les données doivent être contenues dans <u>un seul et unique</u> dossier</b></p>
+	<br>
+	<p align="center"><b>Le nom du dossier doit être le <u>même</u> que le nom à recopier ci-dessous</b></p>
+	<br>
+
+			{%endif%}
+
+	  <div id="contentbox">
+		<form enctype="multipart/form-data" action="{%url add_new_files_from_plato%}" method="post">{% csrf_token %}
+
+		  <table align="center">
+			{%for field in form%}
+
+			{%if field.label == "* Type"%}
+			<tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>
+			<tbody id="more" style="display:none"></tbody>
+			{%else%}
+			
+			   {%if field.label == "Keywords" or field.label == "Mots clefs" %}
+			    <tr><td><b><label for="id_form_media-KW">{{field.label}}</b><br>{{field.help_text|safe}}</label></td>
+			    <td> {{field}}</td>
+			     <div id="autocomplete_KW_choices" class="autocomplete"></div>
+			     <script>new Ajax.Autocompleter("id_form_media-KW", "autocomplete_KW_choices", "{%url autoKW 'form_media' %}", { tokens: ','});</script>
+			    {%else%}		
+			     <tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>
+			    {%endif%}
+			{%endif%}
+	
+			{%endfor%}			
+			<tbody id="allf" style="display:none"></tbody>
+			
+			</table>
+				{%include "validate.html"%}
+		</form>
+	  </div>
+	  {% endblock %}

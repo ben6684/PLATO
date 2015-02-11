@@ -1,0 +1,49 @@
+	{%if s.file_set.all|length == 0%}
+	<h3>{{s.name_ensfile}}</h3>
+	<div id="objectlogo">
+	  <img src="/users/static/images/sources_empty.png">
+	</div>
+	{%else%}
+	{%ifequal s.type_ens_file.id_type_ensfile 1%}
+	<h3>  <a href="{%url audio_corpus_info s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+	<div id="objectlogo">
+	  <img src="/users/static/images/sources_audio.png">
+	</div>
+	{%endifequal%}
+	{%ifequal s.type_ens_file.id_type_ensfile 2%}
+	<h3>  <a href="{%url image_info s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+	<div id="objectlogo">
+	  <img src="/users/static/images/sources_image.png">
+	</div>	
+	{%endifequal%}
+	{%ifequal s.type_ens_file.id_type_ensfile 3%}
+	<h3>  <a href="{%url image_info s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+	<div id="objectlogo">
+	  <img src="/users/static/images/sources_image.png">
+	</div>
+	{%endifequal%}
+ 	{%ifequal s.type_ens_file.id_type_ensfile 4%}
+	<h3>  <a href="{%url files s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+	<div id="objectlogo">
+	  <img src="/users/static/images/sources_image.png">
+	</div>	
+	{%endifequal%}
+ 	{%ifequal s.type_ens_file.id_type_ensfile 5%}
+	<h3> <a href="{%url files s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+	<div id="objectlogo">
+	  <img src="/users/static/images/sources_video.png">
+	</div>
+	{%endifequal%}
+	{%ifequal s.type_ens_file.id_type_ensfile 6%}
+	<h3> <a href="{%url files s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+   <div id="objectlogo">
+	<img src="/users/static/images/sources_file.png">
+  </div>
+	{%endifequal%}
+	{%ifequal s.type_ens_file.id_type_ensfile 7%}
+	<h3> <a href="{%url files s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+   <div id="objectlogo">
+	<img src="/users/static/images/sources_file.png">
+  </div>
+	{%endifequal%}
+	{%endif%}

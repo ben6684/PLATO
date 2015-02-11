@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- <link rel="stylesheet" type="text/css" href="/wiki/static/css/style.css"/> -->
+<link rel="stylesheet" type="text/css" href="/users/static/css/tsi.css"/>
+{% block head_css %} {% endblock %}
+
+
+<script type="text/javascript" src="/users/static/js/search.js"></script>
+<script type="text/javascript" src="/users/static/js/popup.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{% block head_js %}{% endblock %}
+
+<link rel="shortcut icon" type="image/x-icon" href="/users/static/images/favicon.ico" />
+
+	<title>{% block head_title %}PLATO-TSI{% endblock %}</title></head>
+
+	<body>
+
+	  <div id="wrapper"> 
+		<div id="container"> 
+	  <div id="blockheader">
+		<table id="logoarea" cellpadding="0" cellspacing="0" border="0" width="100%">
+			<tr>
+			  <td rowspan="2" valign="middle" class="logoarea-logo">
+				<a href="/"><img src="/users/static/images/plato_ico.png" alt="Plato logo" height="50" style="border:none" longdesc="home" /></a>
+			  </td>
+			  <td rowspan="2" valign="middle" class="logoarea-title">
+				<h1 class="blogtitle" style="font-size:300%;margin-left:20px;">PLATO - TSI</h1><p class="tagline" style="margin-left:20px;"> Plate-forme TSI Online </p>
+			  </td>
+			</tr>
+			<tr>
+			  <td valign="bottom" class="search-box" align="right">
+				<form name="search" action="/search" method="get">{% csrf_token %}
+				  <input id="search_text" type="text" name="search_text">
+				  {%if request.session.lang == 'en'%}<input type="submit" value="Search" >
+				  {%else%} <input type="submit" value="Chercher" > {%endif%}
+				</form>
+			  </td>
+			</tr>
+		</table>
+	  </div>
+
+		  <table id="layout" border="0" cellspacing="0" cellpadding="0">
+			<colgroup> 
+			  <col class="colone" />
+	  <col class="coltwo" /> 
+	  <col class="colthree" />
+	  </colgroup> 
+	  <tr>
+		<!-- Header -->  
+		<td id="header" colspan="3">
+				  <div class="horbar1">&nbsp;</div> <div id="imagecontainer" class="header-image-container" style="background: url('http://www.tsi.telecom-paristech.fr/wp-content/themes/atahualpa/images/header/bandeau4.jpg') top center no-repeat;"><div class="opacityleft">&nbsp;</div><div class="opacityright">&nbsp;</div></div> <div class="horbar2">&nbsp;</div> 
+		</td> 
+		<!-- / Header --> 
+	  </tr>   
+	  <!-- Main Body -->	
+	  <tr id="bodyrow"> 	
+		<!-- Left Sidebar --> 
+		<td id="left">
+		{%if request.session.lang == 'en'%}
+		  {%include "menu.html"%}
+		{%else%}
+		  {%include "menu_fr.html"%}
+		{%endif%}
+		</td> 
+		<!-- / Left Sidebar --> 	
+		<!-- Main Column --> 
+		<td id="middle">
+		  <div class="post-headline"><h1>{% block title %}  {% endblock %}</h1></div>	
+		  {% block content %}
+		  {% endblock %}
+		</td> 
+		<!-- / Main Column -->
+		<!-- Right Inner Sidebar --> 		
+		<!-- Right Sidebar --> 
+				<td id="right">
+				  <select onchange="window.location.href='/users/change_lang?value='+this.value;">
+					<option value="en" {%if request.session.lang == 'en'%}selected{%endif%}>En</option>
+					<option value="fr" {%if request.session.lang == 'fr'%}selected{%endif%}>Fr</option> 
+				  </select>
+		  {%if request.session.login%}
+		  <div id="text-3" class="widget widget_text">	
+		  <div class="widget-title"><h3>{%if request.session.lang == 'en'%}Session information{%else%} Informations de session {%endif%} </h3></div>
+					
+				  {%if request.session.actif%}
+				  <a href="{%url idx%}">
+				  <img style="vertical-align:middle; border-style:none" src="/users/static/images/gohome.png"  width='30'  alt="home" />
+				  {%if request.session.lang == 'en'%}Home{%else%}Accueil{%endif%}   </a>
+				  <br>
+					{%endif%}
+				  <a href="{%url dc%}">
+				  <img style="vertical-align:middle; border-style:none" width='30' src="/users/static/images/logout_30.png" alt="Log out icon">
+				  {%if request.session.lang == 'en'%}Log out{%else%}Déconnexion{%endif%}</a>
+				  <br>
+					{% block session%}{% endblock %}
+					{%if request.session.lang == 'en'%}
+					{%include "report.html"%}
+					{%else%}
+					{%include "report_fr.html"%}
+					{%endif%}
+
+					{%else%}
+
+					{%block error_msg_log%} {%endblock%}
+					<div class="widget-title"><h3>
+					{%if request.session.lang == 'en'%}Login form{%else%}Formulaire de connexion{%endif%}</h3></div>
+
+					<form action="{%url logg%}" method="post"> {% csrf_token %}
+					  <table align="center">
+						  <tr><th><label for="id_log">Login:</label></th><td><input id="id_log" type="text" name="log" size="9%" /></td></tr>
+
+						  <tr><th><label for="id_pwd">{%if request.session.lang == 'en'%}password{%else%}Mot de passe{%endif%}:</label></th><td><input id="id_pwd" type="password" name="pwd" size="9%" /></td></tr>
+	<tr>
+						  <tr>
+							<td> <input type="submit" value="Connexion"/> </td>
+						  </tr>
+					  </table>
+					</form>
+				{%endif%}		  
+<br /> 
+<br /> 
+				<div class="widget-title">
+					  <h3>{%if request.session.lang == 'en'%}PLATO is sponsored by{%else%}PLATO est sponsorisé par{%endif%}</h3></div>
+				<div id="info" style="text-align:center;">
+				  <a target="parent" width=100 href="http://www.mines-telecom.fr/fr_accueil.html">
+				  <img style="padding:5px;" src="/users/static/images/logo.png">
+				  </a>
+					</div>
+		</td> 
+		<!-- / Right Sidebar --> 		
+	  </tr> 
+	  <!-- / Main Body -->
+	  
+	  <tr> 	
+		<!-- Footer --> 
+		<td id="footer" colspan="3"> 
+		  <address>
+		  <a href="http://www.telecom-paristech.fr/" target="_blanc">TELECOM ParisTech</a> |
+		  <a href="http://www.mines-telecom.fr/" target="_blanc"> Institut TELECOM </a> |
+		  <a href="http://www.tsi.telecom-paristech.fr/" target="_blanc"> TSI </a>
+		  </address>
+		  <br>
+		</td> 
+	  </tr> 
+	</table><!-- / layout --> 
+  </div><!-- / container --> 
+  </div><!-- / wrapper --> 
+</body> 
+</html>
+
+  

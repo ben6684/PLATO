@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<title></title>
+</head>
+
+<body>
+<h1></h1>
+
+
+
+<hr>
+<address></address>
+<!-- hhmts start -->Last modified: Tue Nov 20 13:17:14 CET 2012 <!-- hhmts end -->
+</body> </html>
+
+  <!------------------------------------------------------>
+  <!-- OLD PLATO -->
+  <!-- <div id="masthead"> -->
+  <!-- 	<table width="100%" border="0" cellpadding="0" cellspacing="0"> -->
+  <!-- 	  <tr> -->
+  <!-- 		<td> <div id="sitename"> -->
+  <!-- 		  <a href="/wiki/"><img src="/wiki/static/images/plato_ico2.png" alt="Plato logo" height="50" style="border:none" longdesc="home" /></a> -->
+  <!-- 		</div> </td> -->
+  <!-- 		<td><h1>{#% block title %#} {#% endblock %#}</h1> </td> -->
+  <!-- 		<\!-- <td> -\-> -->
+  <!-- 		  <\!-- </td> -\-> -->
+  <!-- 		</tr> -->
+  <!-- 	  </table> -->
+  
+  <!-- 	<div id="zonemenusHR"> -->
+  <!-- 	  search bar in the future -->
+  <!-- 	</div> -->
+  <!-- 	</div> -->
+<!-- <\!-- div class="right" -\-> -->
+<!-- <div id="pagecell"> -->
+<!--   <\!-- div style="background-image:url(qmimages/center_tile.gif)" -\-> -->
+<!--     <div id="zonemenusVR"> -->
+<!-- 		    <div id="cadreRR"> -->
+<!-- 			    <div id="titre"> -->
+<!-- 				  <p style="margin:3px;"> 	Session information </p> -->
+<!-- 				</div> -->
+<!-- 				<div id="info" style="text-align:leftr;"> -->
+<!-- 				  <a href="{%url idx%}"> -->
+<!-- 				  <img style="vertical-align:middle; border-style:none" src="/wiki/static/images/gohome.png"  width='30'  alt="home" /> -->
+<!-- 				  </a> -->
+<!-- 				  <a href="{%url idx%}"> Home   </a> -->
+<!-- 				  <br> -->
+<!-- 				  <a href="{%url dc%}"> -->
+<!-- 				  <img style="vertical-align:middle; border-style:none" width='30' src="/wiki/static/images/logout_30.png" alt="Log out icon"> -->
+<!-- 				  </a> -->
+<!-- 				  <a href="{%url dc%}"> Log out</a> -->
+<!-- 				  <br> -->
+<!-- 				  {#% block session%#}{#% endblock %#} -->
+<!-- 				</div> -->
+<!-- 		    </div> -->
+<!-- 		    <div id="cadreRR"> -->
+<!-- 			    <div id="titre"> -->
+<!-- 				  <p style="margin:3px;"> 	PLATO is sponsored by </p> -->
+<!-- 				</div> -->
+<!-- 				<div id="info" style="text-align:center;"> -->
+<!-- 				  <a target="parent" width=100 href="http://www.mines-telecom.fr/fr_accueil.html"> -->
+<!-- 				  <img style="padding:5px;" src="/wiki/static/images/logo.png"> -->
+<!-- 				  </a> -->
+<!-- 				</div> -->
+<!-- 		    </div> -->
+<!-- 	</div> -->
+
+<!-- 	<div id="zonemenusVL"> -->
+<!-- 	  <div id="cadreML"> -->
+<!-- 		 {#% include "menu.html" %#} -->
+<!-- 	  </div> -->
+<!-- 	</div> -->
+
+<!-- 	<div id="content"> -->
+<!-- 		  {#% block content %#} -->
+<!-- 		  {#% endblock %#} -->
+<!-- 	</div> -->
+
+
+<!-- 	<div id="siteInfo"> -->
+<!-- 	  <address> -->
+<!-- 	  <a href="http://www.enst.fr/" target="_blanc">TELECOM ParisTech</a> | -->
+<!-- 	  <a href="http://www.get-telecom.fr/fr_accueil.html" target="_blanc"> Institut TELECOM </a> | -->
+<!-- 	  <a href="http://www.tsi.enst.fr/" target="_blanc"> TSI </a> -->
+<!-- 	  </address> -->
+<!-- 	  <br> -->
+<!-- 	</div> -->
+<!-- </div> -->
+<!-- </body> </html> -->
+

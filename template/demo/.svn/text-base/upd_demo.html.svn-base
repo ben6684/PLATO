@@ -1,0 +1,38 @@
+{%extends 'base.html'%}
+{% block head_title %}Upd demo{%endblock%}
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+
+{%block title%} upd Demo{%endblock%}
+{%autoescape off%}
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+{%include "asterix.html"%}
+<br>
+
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url upd_demo demo.id_demo%}" method="post">{% csrf_token %}
+
+  <table align="center">
+
+	{%for field in form%}
+	<tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>	
+	{%endfor%}
+	{%for m in demo.examples.all%}
+	<tr id="change_files_{{m.id_file}}"><td><label for="id_files_{{m.id_file}}"></label>Caption : <input type="text" name="legende_{{m.id_file}}" {%if m.get_demo_caption%}value="{{m.get_demo_caption}}"{%endif%}></td><td> Figure :{%if m.type_file.id_type_file == 1%}<img height="40px" src="/root/{{m.show_thumb}}"> {%elif m.type_file.id_type_file == 2%}<audio controls="controls" src="/root/{{m.path}}"> </audio> {%endif%}{{m.name_file}}  <input type="button" value="X" onclick="new_files_demo('{{m.id_file}}')"></td></tr>
+	{%endfor%}
+	<tr> <th>Ajoutez des exemples</th><td><input type="file" name="figures" multiple="multiple" onchange="previmg(this)"//><td></tr>
+	  <tbody id="img_preview"></tbody>
+	
+  </table>
+{%include "validate.html"%}
+</form>
+</div>
+
+
+{%endblock%}
+{%endautoescape%}

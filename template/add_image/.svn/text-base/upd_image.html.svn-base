@@ -1,0 +1,45 @@
+{%extends 'base.html'%}
+{% block head_title %} Add images {% endblock %}
+{%block head_js%}
+<script type="text/javascript" src="/wiki/static/js/form.js">
+</script>
+<script type="text/javascript" src="/wiki/static/js/prototype.js"></script>
+{%endblock%}
+
+{%block title%} Modify images {%endblock%}
+
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url upd_image nm %}" method="post">{% csrf_token %}
+
+  <table align="center">
+	<tr> <td> <b>* Files :</b>  </td><td><input type="file" name="files" multiple="multiple" /><td></tr>
+	{%for field in form%}
+	<tr><th>{{field.label}}</th><td>{{field}}</td></tr>
+	{%endfor%}
+	<tbody id="src" style="display:table-row-group">{{SRC|safe}}</tbody>
+	
+	<tr id="nsrc">
+	  <td><button type="button" onclick="Add_Source()">New Source?</button>
+	  <button type="button" onclick="Upd_Source({{nm}})">Modify Source?</button></td>
+	  {%if flag == 1%}
+	  <td><button type="button" onclick="Add_Scene()">New Scene?</button>
+	  <button type="button" onclick="Upd_Scene({{nm}})">Modify Scene?</button></td>
+	  {%endif%}
+	</tr>
+	
+	<tbody id="add_src" style="display:none"></tbody>
+	<tbody id="add_scn" style="display:none"></tbody>
+
+  <tr><td></td><td><input type="submit" value="Validate the formular"/></td></tr>
+  
+  </table>
+</form>
+</div>
+
+
+{%endblock%}

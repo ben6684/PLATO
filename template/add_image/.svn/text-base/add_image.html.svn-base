@@ -1,0 +1,39 @@
+{%extends 'base.html'%}
+{% block head_title %} Add images {% endblock %}
+{%block head_js%}
+<script type="text/javascript" src="/wiki/static/js/form.js">
+</script>
+<script type="text/javascript" src="/wiki/static/js/prototype.js"></script>
+{%endblock%}
+
+{%block title%} Add images {%endblock%}
+
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url add_gimg%}" method="post">{% csrf_token %}
+
+  <table align="center">
+	<tr> <td> <b>* Files :</b>  </td><td><input type="file" name="files" multiple="multiple" /><td></tr>
+	{%for field in form%}
+	<tr><th>{{field.label}}</th><td>{{field}}</td></tr>
+	{%endfor%}
+	<tbody id="src" style="display:none"></tbody>
+	
+	<tr id="nsrc" style="display:none"><td><button type="button" onclick="Add_Source()">New Source?</button></td><td><button type="button" onclick="Add_Scene()">New Scene?</button></td></tr>
+	
+	<tbody id="add_src" style="display:none"></tbody>
+	<tbody id="add_scn" style="display:none"></tbody>
+	
+  </table>
+  {%include "auth.html"%}
+  <p align="center"><input type="submit" value="Validate the formular"/></p>
+  
+</form>
+</div>
+
+
+{%endblock%}

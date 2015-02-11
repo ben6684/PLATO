@@ -1,0 +1,131 @@
+10
+
+dir
+2271
+https://svn-tsi.telecom-paristech.fr/svn/project/mmm/MMM/trunk/plato
+https://svn-tsi.telecom-paristech.fr/svn/project/mmm
+
+
+
+2014-12-12T13:11:39.478420Z
+2271
+petitpas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+222a57fb-b163-410d-8409-a6bff976eb92
+
+users
+dir
+
+audio
+dir
+
+add_group
+dir
+
+search
+dir
+
+video
+dir
+
+navbar
+dir
+
+data
+dir
+
+publi
+dir
+
+util
+dir
+
+groups
+dir
+
+plato
+dir
+
+manage.py
+file
+
+
+
+
+2013-05-13T13:19:46.479947Z
+c170c3fe49a2a94ab1c34032efa9f1bb
+2013-01-30T17:13:50.342606Z
+30
+petitpas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+248
+
+app
+dir
+
+add_data
+dir
+
+log
+dir
+
+image
+dir
+
+add_publi
+dir
+
+demo
+dir
+
+add_user
+dir
+
+static
+dir
+
+help
+dir
+
+add_app
+dir
+
+cg
+dir
+
+ws
+dir
+

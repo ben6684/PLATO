@@ -1,0 +1,26 @@
+
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}New User{%else%}Nouvel Utilisateur{%endif%} {% endblock %}
+
+{% block title %} {%if request.session.lang == 'en'%}Create a PLATO account please{%else%} Créer un compte sur PLATO s'il-vous-plaît{%endif%}{% endblock %}
+
+
+
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+
+<div id="content">
+{%include "asterix.html"%}
+(need <a href="{%url start%}"><b>help</b></a> ?)
+  <form action="{%url usr_n log%}" enctype="multipart/form-data" method="post"> {% csrf_token %}
+  <table align="center">
+	{{form.as_table}}
+  </table>
+	  {%include "validate.html"%}
+  </form>
+
+</div> <!-- End content -->
+
+{% endblock %}

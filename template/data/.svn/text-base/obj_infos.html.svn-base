@@ -1,0 +1,18 @@
+	  <div id="objectcontent">
+
+		<ul>
+		{%if s.origin%}<li> Origin{%if request.session.lang == 'fr'%}e{%endif%} :  {{s.origin}} </li>{%endif%}
+		{%if s.copyright%}<li> Copyright : {{s.copyright}} </li>{%endif%}
+		{%if s.desc_ensfile%}<li> Description : {{s.desc_ensfile}} </li>	{%endif%}
+		{%if s.date_del|date:'y' < 99 %} {%if request.session.lang == 'en'%}Expiration date{%else%}Date d'expiration{%endif%}: {{s.date_del}}<br>{%endif%}
+		{%if s.KW.all%} <li> {%if request.session.lang == 'en'%}Keywords{%else%}Mots clefs{%endif%} : {%for kw in s.KW.all%}<a href="/search?KW={{kw}}"> {{kw}}</a>, {%endfor%}</li>{%endif%}
+		</ul>
+	  </div>
+	  <div id="objectcontentmore">
+		{%if request.session.login == s.manager.login or me.id_user == s.manager.id_boss%}
+		<input type="button"  value={%if request.session.lang == 'en'%}"Delete"{%else%}"Supprimer"{%endif%} onclick="del_media({{s.id_ensfile}})">
+		<input type="button"  value={%if request.session.lang == 'en'%}"Modify"{%else%}"Modifier"{%endif%} onclick="m_media({{s.id_ensfile}})"><br>
+		{%endif%}
+	  </div>
+	  {%include "bottom.html" with s=s%}
+	  

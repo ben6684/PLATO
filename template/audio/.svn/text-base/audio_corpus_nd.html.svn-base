@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+
+
+  {% block head_title %}{%if request.session.lang == 'en'%}Corpus files informations{%else%}Informations des fichiers des corpus{%endif%} {% endblock %}
+
+  {% block title %}
+  {{titre}}
+  {% endblock%}
+
+  {%block head_js%}
+  <script type="text/javascript" src="/users/static/js/del.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script type="text/javascript" src="/users/static/js/view.js"></script>
+  {%endblock%}
+
+  {% block content %}
+  <br>
+	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+	{%if ef%}
+	<p align='center'>
+	  {%if request.session.lang == 'en'%}Download the ZIP archive{%else%}Télécharger l'archive ZIP{%endif%}<a href="{%url download_zip_archive ef.id_ensfile%}"> {{ef.name_ensfile}}.zip</a><br />
+	</p>
+	{%endif%}
+	<br>
+	  {% for a in Audio.object_list %}
+	  <div id="object">
+		<h3><a href="{% url download_mma a.file.id_file%}">{{a.file.name_file}}</a></h3>
+		<div id="objectlogo">
+		  <img src="/users/static/images/audio.png">
+		</div>
+		<div id="soundcontent">
+		  <ul>
+			{%ifnotequal a.file.desc_file "None"%}<li> Description : {{a.file.desc_file}} </li>{%endifnotequal%}
+			<li> {%if request.session.lang == 'en'%}Duration{%else%}Durée{%endif%} : {{a.duration|time:"H:i:s"}} </li>
+			{%if a.instrument.all%}<li> Instruments :  {%for i in a.instrument.all%} <b>{{i}},</b>   {%endfor%}</li>{%endif%}	 
+			{%if a.note.all %}<li> Notes :  {%for n in a.note.all%}<b>  {{n}}, </b> {%endfor%}</ul></li>{%endif%}
+		  {%if a.file.KW.all%}<li> {%if request.session.lang == 'en'%}Keywords{%else%}Mots clefs{%endif%} : {%for kw in a.file.KW.all%} {{kw}} {%endfor%}</li>{%endif%}
+		</ul>
+
+		</div>
+		<div id="soundcontentmore">
+		  <ul>
+			{%ifnotequal a.file.artists None%}<li> {%if request.session.lang == 'en'%}Artists{%else%}Artistes{%endif%} : {{a.file.artists}}</li>{%endifnotequal%}
+			{%ifnotequal a.type_sound None%}<li> {%if request.session.lang == 'en'%}Audio type{%else%}Type de son{%endif%} : {{a.type_sound}}</li>{%endifnotequal%}
+			<li> File :  <a href="{% url download_mma a.file.id_file%}"> {{a.file.path}} </a> </li>
+			<li>
+			  <audio controls>
+				<source src="/root/{{a.file.path}}">
+				  <embed src="/root/{{a.file.path}}">
+			  </audio>
+			  <!-- <a href="/root/{{a.file.path}}"> </a><script src="http://mediaplayer.yahoo.com/js"></script> -->
+			</li>
+			<li> {%if request.session.lang == 'en'%}Size{%else%}Taille{%endif%} : {{a.file.size_file|filesizeformat }} </li>
+			{%if a.file.group%} <li> {%if request.session.lang == 'en'%}Project{%else%}Projet{%endif%} : <a href="{%url grp a.file.group.id_group%}">{{a.file.group.name_group}}</a> </li>{%endif%}
+			{%if a.file.manager == me or a.file.manager.id_boss == me.id_user%}
+			<input type="button" value={%if request.session.lang == 'en'%}"Modify"{%else%}"Modifier"{%endif%} onclick="m_file({{a.file.id_file}})">
+			  <input type="button" value={%if request.session.lang == 'en'%}"Delete"{%else%}"Supprimer"{%endif%} onclick="del_file({{a.file.id_file}})">
+				<br>
+				  {%endif%}
+		</ul>
+		</div>
+		{%include "bottom.html" with s=a.file%}
+
+	  </div>
+	  
+{%endfor%}
+
+	  {%include "pagination.html" with OBJ=Audio%}
+
+	  {% endblock %}

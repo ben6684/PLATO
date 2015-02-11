@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/project/mmm/!svn/ver/2244/MMM/trunk/plato/add_app
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/project/mmm/!svn/ver/2032/MMM/trunk/plato/add_app/urls.py
+END
+add_app.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/project/mmm/!svn/ver/2244/MMM/trunk/plato/add_app/add_app.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/project/mmm/!svn/ver/2147/MMM/trunk/plato/add_app/views.py
+END

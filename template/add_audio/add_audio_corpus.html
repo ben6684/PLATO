@@ -1,0 +1,81 @@
+{%extends 'base.html'%}
+{% block head_title %} Add audio data {% endblock %}
+{%block head_js%}
+<script type="text/javascript">
+function show_inst(id)
+{
+if (id =="2")
+{
+document.getElementById("insts").style.display= "table-row";
+document.getElementById("ens_typ").style.display= "table-row";
+document.getElementById("inst").style.display= "none";
+document.getElementById("note").style.display= "none";
+}
+else if (id=="4")
+{
+document.getElementById("insts").style.display= "none";
+document.getElementById("ens_typ").style.display= "none";
+document.getElementById("inst").style.display= "table-row";
+document.getElementById("note").style.display= "table-row";
+}
+else if (id=="1" || id =="3")
+{
+document.getElementById("insts").style.display= "none";
+document.getElementById("ens_typ").style.display= "none";
+document.getElementById("inst").style.display= "table-row";
+document.getElementById("note").style.display= "none";
+}
+else{
+document.getElementById("insts").style.display= "none";
+document.getElementById("ens_typ").style.display= "none";
+document.getElementById("inst").style.display= "none";
+document.getElementById("note").style.display= "none";
+}
+}
+</script>
+{%endblock%}
+
+{%block title%} Add an audio Corpus{%endblock%}
+
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url add_audio_corpus%}" method="post">{% csrf_token %}
+
+  <table align="center">
+	<tr> <td> <b>* Files :</b>  </td><td><input type="file" name="files" multiple="multiple" /><td></tr>
+
+	{%for field in form%}
+	{%if field.label != "Instruments"%}
+	{%if field.label != "Instrument"%}
+	{%if field.label != "Note"%}
+	{%if field.label != "Ensemble type"%}
+	<tr><th>{{field.label}}</th><td>{{field}}</td></tr>
+	{%endif%}{%endif%}{%endif%}{%endif%}
+	{%if field.label == "Instruments"%}
+	<tr id="insts" style="display:none"><th>{{field.label_tag}}</th><td> {{field}}</td></tr>
+	{%endif%}
+	{%if field.label == "Ensemble type" %}
+	<tr id="ens_typ" style="display:none"><th>{{field.label_tag}}</th><td>{{field}}</td></tr>
+	{%endif%}
+	{%if field.label == "Instrument" %}
+	<tr id="inst" style="display:none"><th>{{field.label_tag}}</th><td>{{field}}</td></tr>
+	{%endif%}	
+	{%if field.label == "Note" %}
+	<tr id="note" style="display:none"><th>{{field.label_tag}}</th><td>{{field}}</td></tr>
+	{%endif%}
+	{%endfor%}
+  </table>
+  {%include "auth.html"%}
+  <p align="center"><input type="submit" value="Validate the formular"/></p>
+
+
+  </table>
+</form>
+</div>
+
+
+{%endblock%}

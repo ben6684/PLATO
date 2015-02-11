@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head_title %} Add data {% endblock %}
+
+
+{% block title %}
+Add a data
+{% endblock%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+<div id="contentbox">
+<h3> Add data on PLATO</h3>
+  <p> Choose the data you want to add : </p>
+
+  <ul>
+	<li> <a href="{%url add_audio%}"> Audio files </a> (corpus, file, solo, ensemble, etc ...)</li>
+	<li> <a href="{%url add_gimg%}"> Image files </a> (corpus, file, generic, medical, satellite, etc ...)</li>
+  </ul>
+</div>
+{% endblock %}

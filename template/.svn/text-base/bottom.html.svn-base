@@ -1,0 +1,8 @@
+
+		<div id="objectbottom">
+		{%if request.session.lang == 'en'%}
+		  Created the <b>{{s.date_creation|date:"j M Y"}}</b> by <a href="{%url usr s.manager.login%}">{{s.manager.fstnm_person}} {{s.manager.nm_person}}</a> {%ifnotequal s.date_creation|date:"jny" s.date_modification|date:"jny"%} - last modified : {{s.date_modification|date:"j M Y"}}{%endifnotequal%}
+		{%else%}
+		  Créé le <b>{{s.date_creation|date:"j M Y"}}</b> par <a href="{%url usr s.manager.login%}">{{s.manager.fstnm_person}} {{s.manager.nm_person}}</a> {%ifnotequal s.date_creation|date:"jny" s.date_modification|date:"jny"%} - modifié le : {{s.date_modification|date:"j M Y"}}{%endifnotequal%}
+		{%endif%}
+		</div>

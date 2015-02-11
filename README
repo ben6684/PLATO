@@ -1,0 +1,122 @@
+###########################################
+######## Documentation en français ########
+###########################################
+
+------- Si vous souhaitez juste administrer des éléments de PLATO --------
+
+
+En allant sur plato-tsi.enst.fr/admin/ OU n'importe quelle plateforme platoXXXX.telecom-paristech.fr/admin/, vous accéderez à une interface login password différente de celle habituelle. 
+Rentrez 
+login : telecom-plato
+password : kohnuGh1   
+
+Cela permet d'utiliser l'interface admin de django.
+
+Notamment cela permet de modifier ou supprimer des éléments indésirables sur PLATO. 
+
+
+------ Rajoutez des démos ------
+
+
+Pour rajouter une démo : 
+
+- Allez dans l'interface ADMIN (et oui pas de pages consacrées).
+
+- Rajouter un élément sur Demos. Le point important est cmd qui correpond à la commande à lancer dans un bash (prenons l'exemple de MobyDick, la commande c'est "MobyDick %s %s %s" correspondant au nom de commande suivi de %s %s %s, parceque MobyDick se lance AVEC des entrées sorties et paramètres. Si juste une entrée est nécessaire lancez "nom_prog %s"). organisation quand a elle sert à définir l'ordre d'utilisation entre entrée, sortie et paramètre : "esp" signifie entrée, sortie, paramètre, là où "pe" signifirait paramètre, entrée. 
+
+- Ensuite Ajoutez des es_demos qui sont des entrées sorties enspécifiant par exemple le type d'entrée/sorties
+
+- Ensuite rajoutez des paramètres via param_demos en spécifiant par exemple des valeurs par défaut et des limites
+
+- PUIS si des exemples existent rajoutez demo examples qui correspondent aux entrées par défaut qui seront lancés via run. Attention, ce sont des "file" objects, donc a ajouter d'abord ( ou alors via plato-tsi.telecom-paristech.fr/demo/upd/(id_demo)/ pour modifier une démo et rajouter automatiquement des exemples)
+
+
+
+------ Si vous souhaitez developper sur PLATO -----------
+
+
+Voici la première chose que vous devez lire si vous souhaitez coder sur PLATO.
+
+
+# 1) Obtenez le code. 
+
+La première chose à faire est d'obtenir les droits du SVN.
+
+https://svn-tsi.telecom-paristech.fr/trac/project/mmm/wiki
+
+Sur le wiki vous trouverez un certains nombre d'informations (pas toujours à jour).
+
+Le gmail de PLATO (pour les vidéos):
+login : plato
+password telec0m-P@ristech
+
+# 2) se familiariser avec PLATO.
+
+Le but est juste de tester de quoi PLATO est capable. Attention tout de même, la plate-forme de dev ajoute tout sur la base de données DEFINITIVES. Donc on laisse pas le produit de ses tests trainer. On a fait ça pour des souci de simpliciter (sachant que les tests c'est moi qui les faisaient). après il est toujorus possible de dupliquer la base de données pour s'en créer une de dev. 
+
+# 3) Lire le code
+
+Normalement le code est assez clair ET pas mal commenté. Tout est programmée MVC, le modèle c'est la base de données postgresql (utilise pgadmin, plato-db.enst.fr, c'est gérer par la DSI auprès du database administrator, donc pas de souci pour obtenir les accès. tout de même le port TCP : 5432 et surtout la base utilisée est plato_test, plato_dev étant une sauvegarde de l'ancien plato, plato_vitrine est une copie de plato_test effectuée chaque soir) 
+
+Donc en gros le code c'est deux parties : 
+
+-plato : c'est le controlleur, tout écrit en python avec des sous-dossier (chacun créer par Django) dont les noms correspondent à la fonction (genre add_app c'est le dossier qui gère les controlleurs pour ajouter des programmes, users, bah ça gère l'affichage utilisateur, seul util est un peu fourre tout ... util.views gère toutes les petites application utiles partout et appelable sur le site. utils.object_util correspond à un ensemble de traitements applicable à tous les objects, genre gérer l'upload (où mettre les donénes) ce genre de chose, util.manage_demo pour gérer les démos (pas super gérer, j'en parlerais) et upd_bilbio qui gère la mise à jour des publi depuis la base de ppubli de témécom (c'est un peu à chier car l'autre connard qui gère la base des publis refuse que je me connecte à sa base pour lire (ne parlons meme pas d'ajouter/modifier)))
+
+- template : c'es la vue, c'est des page html qui gère le contenu, le tout dans le formalisme Django.
+
+# 4) Apprendre Django
+
+C'est indipensable ! prend du temsp mais apprend bien django. J'ai codé version 1.1 donc souvent j'ai pas utiliser plein de nouvelles features sympa donc à toi de voir si par exemple, uine fois django bien maitrisé, tu pourrais juste mettre à jour certain trucs qui change pas PLATO mais qui te permet de bien rentrer dans le code. 
+
+# 5) Css / javascript
+
+Oui le Css de PLATO et PLATO vitrine (ancien noms de plato-tsi et plato) est un epu pourri, j'ai récupérer le css du wordpress auquel j'ai rajouter tout un tas de trucs dispensable. 
+
+De plus j'avais utiliser prototype qui est une lib javascript qui se meurt petit à petit, donc si tu t'y connais hésite pas à tout refaire. 
+
+# 6) plateforme admin django
+
+Si tu tape plato-tsi.enst.fr/admin, tu verra une interface login password différente de celle habituelle. tu rentre le login : telecom-plato et le password : kohnuGh1   ça te permettra d'utiliser l'interface admin de django.
+
+# 7) démos
+
+J'ai jamais eu le temsp de vraiment faire un truc propore pour démo donc c'est un peu crade. Tu vas sur l'interface admin tu rajoute des démos via cette interface et surtout tu dois comprendre que esp est l'ordre dans lequel la ligne de commande est appeler, e pour entrée, s pour sortie et p pour paramètre, après tu dois spécifier chaque entrée/sortie et rentrer chaque paramètre. c'est un nul. 
+
+Pour rajouter une démo : 
+
+- Allez dans l'interface ADMIN (et oui pas de pages consacrées).
+
+- Rajouter un élément sur Demos. Le point important est cmd qui correpond à la commande à lancer dans un bash (prenons l'exemple de MobyDick, la commande c'est "MobyDick %s %s %s" correspondant au nom de commande suivi de %s %s %s, parceque MobyDick se lance AVEC des entrées sorties et paramètres. Si juste une entrée est nécessaire lancez "nom_prog %s"). organisation quand a elle sert à définir l'ordre d'utilisation entre entrée, sortie et paramètre : "esp" signifie entrée, sortie, paramètre, là où "pe" signifirait paramètre, entrée. 
+
+- Ensuite Ajoutez des es_demos qui sont des entrées sorties enspécifiant par exemple le type d'entrée/sorties
+
+- Ensuite rajoutez des paramètres via param_demos en spécifiant par exemple des valeurs par défaut et des limites
+
+- PUIS si des exemples existent rajoutez demo examples qui correspondent aux entrées par défaut qui seront lancés via run. Attention, ce sont des "file" objects, donc a ajouter d'abord ( ou alors via plato-tsi.telecom-paristech.fr/demo/upd/(id_demo)/ pour modifier une démo et rajouter automatiquement des exemples)
+
+
+N'hésite pas à changer tout ça, c'est du temporaire qui dure. 
+
+# 8) Apache configuration
+
+Il y a un serveur apache par plato. Sauf plato-dev et plato-vitrine-dev qui sont sur le même serveur. Les configs apaches sont classiques. la seul chose que j'ai vraiment configuré est sur plato/plato/wsgi.py qui est le fichier interprété par Django pour lancer apache. C'est là que j'ai fait la redirection disant qui si la demande de connexion à plato.telecom-paristech.fr venait d'une des IP de l'école alors il fallait lancer plato-tsi.telecom-paristech.fr. 
+
+
+-------------------------------------------------
+
+---- Comment bien débuter à coder sur PLATO -----
+
+
+=> Pour bien débuter, l'une des choses primoridales à finir est de créer une fonction qui permet de créer des zip des ensembles de données rajouter. 
+
+=> De supprimer le zip et le recréer si des fichiers sont ajoutés à un ensemble de ficheir (ensfile).
+
+=> De Refaire le management des démos.
+
+
+---------------------------------------------------
+
+A partir de là tu sais gérer plato et le travail qu'il te reste à faire. Bon courage. 
+
+Et comme je suis cool tu peux me contacter sur petitpas.benoit@gmail.com
+

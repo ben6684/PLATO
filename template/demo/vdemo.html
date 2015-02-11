@@ -1,0 +1,306 @@
+{% extends 'base.html' %}
+
+  {%block head_js%} 
+  <script type="text/javascript" src="/users/static/js/del.js"></script> 
+  <script type="text/javascript" src="/users/static/js/util.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script type="text/javascript" src="/users/static/js/highslide/highslide.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/glMatrix-0.9.5.min.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/webgl-utils.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/camera.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl/pointset.js"></script>
+  <script type="text/javascript" src="/users/static/js/webgl.js"></script>
+  <script type="text/javascript" src="/users/static/js/viewer.js"></script>
+  <script type="text/javascript" src="/users/static/js/form.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+  <script type="text/javascript">
+    hs.graphicsDir = '/users/static/js/highslide/graphics/';
+  </script>
+  <script id="shader-fs" type="x-shader/x-fragment">
+	precision mediump float;
+
+	//varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
+	varying vec3 normal;
+
+	uniform float uAlpha;
+
+	//uniform sampler2D uSampler;
+
+	uniform bool uUseTexturing;
+	uniform bool uSmoothedPoint;
+	uniform bool uPointSet;
+
+	void main(void) {
+    vec4 textureColor = vec4(1., 1., 1., 1.);
+
+    if(uPointSet)
+    {
+	if(uSmoothedPoint)
+	{
+	float r = (gl_PointCoord.s-0.5)*(gl_PointCoord.s-0.5)
+	+ (gl_PointCoord.t-0.5)*(gl_PointCoord.t-0.5);
+	r = 1.-4.*r;
+	if(r<0.0) discard;
+	}
+    }
+	gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+	}
+
+  </script>
+
+  <script id="shader-vs" type="x-shader/x-vertex">
+	attribute vec3 aVertexPosition;
+	attribute vec3 aVertexNormal;
+	//attribute vec2 aTextureCoord;
+
+	uniform mat4 uMVMatrix;
+	uniform mat4 uPMatrix;
+	uniform mat3 uNMatrix;
+
+	uniform vec3 uAmbientColor;
+
+	uniform vec3 uLightingDirection;
+	uniform vec3 uDirectionalColor;
+	uniform vec3 uLightingDirection2;
+	uniform vec3 uDirectionalColor2;
+
+	uniform bool uUseLighting;
+
+	uniform float uPointSize;
+
+	//varying vec2 vTextureCoord;
+	varying vec3 vLightWeighting;
+	varying vec3 normal;
+
+
+
+
+
+
+	void main(void) {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_PointSize = uPointSize;
+    //vTextureCoord = aTextureCoord;
+
+    if (!uUseLighting) {
+	vLightWeighting = vec3(1.0, 1.0, 1.0);
+    } else {
+	vec3 transformedNormal = uNMatrix * aVertexNormal;
+	normal = transformedNormal;
+	float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+	float directionalLightWeighting2 = max(dot(transformedNormal, uLightingDirection2), 0.0);
+	vec3 uLightingDirection3 = vec3(-438., 167., -48.);
+	uLightingDirection3 = normalize(uLightingDirection3);
+	vec3 uDirectionalColor3 = vec3(1.0, 0.69, 0.23);
+	float directionalLightWeighting3 = max(dot(transformedNormal, uLightingDirection3), 0.0);
+	vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting
+	+ uDirectionalColor2 * directionalLightWeighting2
+	+ uDirectionalColor3 * directionalLightWeighting3;
+	vLightWeighting.r = vLightWeighting.r>1.0?1.0:vLightWeighting.r;
+	vLightWeighting.g = vLightWeighting.g>1.0?1.0:vLightWeighting.g;
+	vLightWeighting.b = vLightWeighting.b>1.0?1.0:vLightWeighting.b;
+    }
+	}
+  </script>
+  {%endblock%}
+
+  {%block head_css%}
+  <link rel="stylesheet" type="text/css" href="/users/static/js/highslide/highslide.css" />
+	{%endblock%}
+
+	{% block head_title %} PLATO demo{% endblock %}
+
+	{% block content %}
+	{% if error_message %}
+	<p><strong>{{ error_message }}</strong></p>
+	{% endif%}
+
+	<div id="titre"> {{demo.name_demo}}</div>
+	<div id="abstract" style="margin:25px 0px 15px 25px;">
+	  {%if demo.desc_demo%}  <b>Description :</b> {{demo.desc_demo|safe}} {%endif%}
+	  <br>{{plop|safe}}
+
+	</div>
+
+
+	<!-- INPUT content -->
+	<div id="algo"><h2>{%if request.session.lang == 'en'%}Demos inputs and parameters{%else%}Entrées et paramètres de la démo{%endif%}</h2></div>
+
+	<form enctype="multipart/form-data" action="{%url vdemo demo.id_demo%}" method="post">{% csrf_token %}
+	  
+	  <div id="selection_input" style="font-size:120%;border-style: inset;">
+
+		<!--titre des input -->
+		<h3> Inputs </h3>
+		
+		{%for inp in demo.get_input%}
+		<div id="blockinput">
+		  &#9632; {{inp.name_es}} : 
+		  {%if inp.type_es.id_type_es == 1%}
+		  <input type="file" name="input_{{inp.id_es}}" onchange="previmg_demo(this,{{inp.id_es}})"></input> <div id="img_preview{{inp.id_es}}"></div>
+		  {%elif inp.type_es.id_type_es < 6%}
+		  <input type="file" name="input_{{inp.id_es}}"/></input> 
+		  {%else%}
+		  <input type="text" name="input_{{inp.id_es}}"/></input> 
+		  {%endif%}
+		</div>
+		{%endfor%}
+
+	  </div>
+
+	  <hr>
+
+	  {%if demo.examples.all %}
+	  <div id="selection_input" style="font-size:120%;border-style: inset;">
+		<h3> Examples </h3>
+		{%for f in demo.examples.all%}
+		<div id="blockinput">
+			&#9632; {%if f.get_demo_caption%}{{f.get_demo_caption}} : {%endif%}
+		  {%if f.type_file.id_type_file == 1%} <img src="/root/{{f.path}}" width="200"></img>
+		  {%elif f.type_file.id_type_file == 2%} 	<audio controls="controls" src="/root/{{f.path}}"> </audio>
+		  {%else%}{{f.name_file}}
+		  {%endif%}
+		</div>
+		{%endfor%}
+	  </div>
+	  {%endif%}
+
+	{%if demo.get_param%}
+	  <div id="selection_input" style="font-size:120%;border-style: inset;">
+		 <h3> Parameters </h3>
+		{%for par in demo.get_param%}
+		&#9632; {{par.name_param}} : {%if par.limite_inf%}{{par.limite_inf}}<{%endif%} <input type="text" name="param_{{par.id_param_demo}}" {%if par.initial_value%} value="{{par.initial_value}}"{%endif%}>{%if par.limite_sup%}{{par.limite_sup}}<{%endif%}
+		  {%endfor%}
+	  </div>
+		{%endif%}
+		
+		<p style="margin-top:20px; text-align:center;">
+		  {%if demo.estimate_time%} {%if request.session.lang == 'en'%}Processing time estimation{%else%}Temps estimé d'execution{%endif%} : {{demo.estimate_time}} {%endif%}<br>
+		  <input type="submit"  value="    Run    "/>	  
+		</p>
+	</form>
+	  <!-- end INPUT content -->
+
+	{%if flag%}
+	{%if not flag_ex%}
+
+	  <div id="selection_input" style="width:auto; border-style:inset; " >
+		<h5> Inputs </h5>
+		<!-- <small>{{test_cmd}}</small><br> -->
+		{%for inp in demo.get_input%}
+		{%for k,v in inputs.items%}
+		{%if k == inp.name_es%}
+		{%if inp.type_es.id_type_es == 1%}
+		<img src="/root/{{v}}" width="200"></img><br>
+		  {%elif inp.type_es.id_type_es == 2%}
+		  <audio controls><source src="/root/{{v}}"></source></audio><br>
+			{%elif inp.type_es.id_type_es == 3%}
+			<video width="320" height="240" controls> <source src="/root/{{v}}"></source></video><br>
+			  {%elif inp.type_es.id_type_es == 4%}
+			  <input type="button" value={%if request.session.lang == 'en'%}"show the object"{%else%}"Afficher l'objet"{%endif%} onclick="initViewer('/root/{{v}}')"></input><br>
+	{%elif inp.type_es.id_type_es == 5%}
+	<a href="/root/{{v}}"><img src="/users/static/images/f_pdf.png"></a><br>
+	  {%endif%}
+	  {%endif%}
+	  {%endfor%}
+	  {%endfor%}
+	  
+	</div>
+	  {%endif%} <!-- end flag_ex -->
+
+
+	  <!-- OUTPUT content -->
+
+	<div id="algo"><h2>{%if request.session.lang == 'en'%}Output{%else%}Sorties{%endif%}</h2></div>
+	<div id="selection_input" style="font-size:120%;  display:inline-block;    vertical-align: top;" ">
+	  
+	  <div id="blockinput" style="width:auto; border-style:solid;  display:inline-block;    vertical-align: top;"> 
+		<h3> Output results </h3>
+		{%for inp in demo.get_output%}
+		
+		{%for k,v in outputs.items%}
+		{%if k == inp.name_es%}
+		<div id="blockinput" style="display:inline-block;vertical-align: top;">
+		  <br>	
+			<span style="text-align:center;font-size:120%;font-style:bold;">{{inp.name_es}}</span> {%if ext%}<a href="/root/{{v}}">{%else%} <a href="{{v}}"> {%endif%}<span style="font-style:bold;"> Download </span></a>
+			<br><br>
+		  
+		{%if inp.type_es.id_type_es == 1%}
+		<img src="{%if ext%}/root/{{v}}{%else%}{{v}}{%endif%}" width="400" ></img>
+		{%elif inp.type_es.id_type_es == 2%}
+		<audio controls><source src="{%if ext%}/root/{{v}}{%else%}{{v}}{%endif%}"></source></audio>
+		{%elif inp.type_es.id_type_es == 3%}
+		<video width="640" height="480" controls> <source src="{%if ext%}/root/{{v}}{%else%}{{v}}{%endif%}"></source></video>
+		{%elif inp.type_es.id_type_es == 4%}
+		<input type="button" value={%if request.session.lang == 'en'%}"show the object"{%else%}"Afficher l'objet"{%endif%} onclick="initViewer('{%if ext%}/root/{{v}}{%else%}{{v}}{%endif%}')"></input>
+
+		  <div id="filenoption" style="text-align:left;display:inline-block;vertical-align: top;">
+			<h3 style="color:#990000;"> Options </h3>
+			<ul>
+			  <li><input type="checkbox" id="pointSet" checked />{%if request.session.lang == 'en'%}PointSet{%else%}Ensemble de points{%endif%}</li>
+			  <li><input type="checkbox" id="smoothedPoint" checked /> {%if request.session.lang == 'en'%}Smoothed points{%else%}Points lissés{%endif%}</li>
+			  <li>{%if request.session.lang == 'en'%}Points Size{%else%}Taille des points{%endif%}<input type="text" id="pointSize" value="1.0" /></li>
+			</ul>
+		  </div>
+		  <div id="viewer2" onresize="updateGL()">
+			<canvas id="viewer-canvas"></canvas>
+		  </div>
+		{%elif inp.type_es.id_type_es == 5%}
+		<a href="{%if ext%}/root/{{v}}{%else%}{{v}}{%endif%}"><img src="/users/static/images/f_pdf.png"></a>
+		{%endif%}
+				</div>
+		{%endif%}
+		{%endfor%}
+		{%endfor%}
+	  </div>
+	</div>
+	  {%endif%} <!-- end flag -->
+	  <!-- END OUTPUT content -->
+
+
+
+	  {%if demo.tool%}	
+	  <div id="algo"><!-- Algorithm content -->
+		<h2> {%if request.session.lang == 'en'%}Related Tools{%else%}Outils associés{%endif%} </h2>
+	  </div>
+	  <div id="object">
+		<h3><a href="{%url vcode demo.tool.id_tool%}">{{demo.tool.name_tool}} </a></h3>
+		<div id="objectlogo">
+		  <a href="{%url vcode demo.tool.id_tool%}">	<img src="/users/static/images/application.png"></a>
+		</div>
+		<div id="objectcontentmore" style="width=15%;margin=40px 15px 15px 0px">
+		  <ul>
+			{%if demo.tool.webpage_tool%}<li> {%if request.session.lang == 'en'%}Webpage{%else%}Page web{%endif%} : {{demo.tool.webpage_tool}}</li>{%endif%}
+			{%if demo.tool.manager%}<li> {%if request.session.lang == 'en'%}Manager{%else%}Gérant{%endif%} : <a href="{%url usr demo.tool.manager.login%}">{{demo.tool.manager.fstnm_person}} {{demo.tool.manager.nm_person}}</a> </li>{%endif%}
+			{%if demo.tool.type_tool%} <li>{%if request.session.lang == 'en'%}Tool type{%else%}Type d'outil{%endif%} :  {{demo.tool.type_demo.tool.nm_type_tool}}</li>{%endif%}
+			{%if demo.tool.licence%}<li>{%if request.session.lang == 'en'%}License{%else%}Licence{%endif%} :  {{demo.tool.licence.nm_license}}</li>{%endif%}
+		  </ul>
+		</div>
+		<div id="objectcontent" style="width=85%;margin=40px 15px 15px 0px">
+		  {%if demo.tool.desc_tool%} Description :{{demo.tool.desc_tool|safe}}{%endif%}	
+		</div>
+		{%include "bottom.html" with s=demo.tool%}
+	  </div>
+	  {%endif%}
+
+	  {%if demo.publi%}	
+	 	<div id="algo"><h2>{%if request.session.lang == 'en'%}Related publications{%else%}Publications liées{%endif%}</h2></div>
+				{%for p in demo.publi.all%}
+				<div id="article">
+				  <div id="article-infos">
+					<h3><a href="{%url vpage p.id_page%}">{{p.titre}}</a></h3>
+					<author> {%for a in p.author.all%} {% if not forloop.last %} {{a.fstnm}} {{a.nm}},  {% else %} {{a.fstnm}} {{a.nm}}  {% endif %}  {%endfor%}</author><br>
+					  <conf> {{p.id_conf.titre_conf}} {{p.annee}}</conf>
+				  </div>
+				  <div id="article-dl">
+					{%if p.id_article %}<a href="/util/download/{{p.id_article.id_file}}"><img src="/users/static/images/f_pdf_32.png"></a>{%endif%}
+					{%if p.id_presentation %}<a href="/util/download/{{p.id_presentation.id_file}}"><img src="/users/static/images/prez_32.png"></a>{%endif%}
+				  </div>
+				</div>
+				{%endfor%}
+	  {%endif%}
+
+
+	  {%endblock%}

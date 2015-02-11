@@ -1,0 +1,86 @@
+function getFileExtension(filename) {
+	return filename.split('.').pop();
+}
+function getXmlHttp() {
+    if (window.XMLHttpRequest) {
+        xmlhttp=new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    if (xmlhttp == null) {
+        alert("Your browser does not support XMLHTTP.");
+    }
+    return xmlhttp;
+}
+function openFile(fileName) {
+
+
+    xmlhttp = getXmlHttp();
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState==4) {
+			if (getFileExtension(fileName)=="ply"){
+				loadPlyFile(xmlhttp.responseText);
+			}		
+			else if (getFileExtension(fileName)=="off"){
+				loadOffFile(xmlhttp.responseText);
+			}
+        }
+    }
+    xmlhttp.open("GET", fileName, true);
+    xmlhttp.send(null);
+
+}
+function initViewer(name) {
+	
+
+    webGLStart();
+
+    openFile(name);
+
+
+    //var canvas = document.getElementById("viewer-canvas");
+    //canvas.addEventListener("dragover", handleDragOver, false);
+    //canvas.addEventListener("drop", handleFileSelect, false);
+    // createMenu("params");
+}
+
+// function handleDragOver(evt) {
+//     evt.stopPropagation();
+//     evt.preventDefault();
+//     evt.dataTransfer.dropEffect = "copy"; // Explicitly show this is a copy.
+// }
+
+// function handleFileSelect(evt) {
+//     evt.stopPropagation();
+//     evt.preventDefault();
+
+//     var files = evt.dataTransfer.files; // FileList object.
+
+//     // Loop through the FileList and render image files as thumbnails.
+//     for (var i = 0, f; file = files[i]; i++) {
+//         // Only process image files.
+//         if (file.name.match(/ply$/g)) {
+//             var start = 0;
+//             var stop = file.size - 1;
+
+//             var reader = new FileReader();
+
+//             reader.onloadend = function(e) {
+//                 if (e.target.readyState == FileReader.DONE) {
+//                     loadFile(e.target.result);
+//                 }
+//             };
+
+//             if (file.slice) {
+//                 var blob = file.slice(start, stop);
+//             } else if (file.mozSlice) {
+//                 var blob = file.mozSlice(start, stop);
+//             } else if (file.webkitSlice) {
+//                 var blob = file.webkitSlice(start, stop);
+//             }
+
+//             reader.readAsBinaryString(blob);
+//         }
+//     }
+// }
+

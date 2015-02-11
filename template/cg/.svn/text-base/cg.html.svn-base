@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}Computer Graphic gathering Information{%else%}Informations des ensembles d'objets 3D{%endif%} {% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}Computer Graphic Corpus Information{%else%}Informations des ensembles d'objets 3D{%endif%}
+{% endblock%}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/del.js"></script>
+<script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+
+{%endblock%}
+
+{% block content %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+
+{% for s in Sources.object_list %}
+<div id="object">
+	<h3> <a href="{%url 3df s.id_ensfile%}">{{s.name_ensfile}}</a> </h3>
+   <div id="objectlogo">
+	<img src="/users/static/images/sources_3d2.png">
+  </div>
+	<div id="formodif{{s.id_ensfile}}">
+	  <div id="objectcontent">
+
+		<ul>
+		{%if s.origin%}<li> Origin{%if request.session.lang == 'fr'%}e{%endif%} :  {{s.origin}} </li>{%endif%}
+		{%if s.copyright%}<li> Copyright : {{s.copyright}} </li>{%endif%}
+		{%if s.desc_ensfile%}<li> Description : {{s.desc_ensfile}} </li>	{%endif%}
+		{%if s.date_del|date:'y' < 99 %} {%if request.session.lang == 'en'%}Expiration date{%else%}Date d'expiration{%endif%} : {{s.date_del}}<br>{%endif%}
+		{%if s.KW.all%} <li> {%if request.session.lang == 'en'%}Keywords{%else%}Mots Clefs{%endif%} : {%for kw in s.KW.all%}<a href="/search?KW={{kw}}"> {{kw}}</a>, {%endfor%}</li>{%endif%}
+		</ul>
+	  </div>
+	  <div id="objectcontentmore">
+		{%if me == s.manager or me.id_user == s.manager.id_boss %}
+		<input type="button"  value={%if request.session.lang == 'en'%}"Delete"{%else%}"Supprimer"{%endif%} onclick="del_media({{s.id_ensfile}})">
+		<input type="button"  value={%if request.session.lang == 'en'%}"Modify"{%else%}"Modifier"{%endif%} onclick="m_media({{s.id_ensfile}})"><br>
+		{%endif%}
+	  </div>
+	  {%include "bottom.html" with s=s%}
+	  <br style="clear: left;" />
+	</div>
+</div>
+{%endfor%}
+
+{%include "pagination.html" with OBJ=Sources%}
+<br>
+ {% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}Videos Files{%else%}Fichiers Vidéos{%endif%} {% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}Videos Files{%else%}Fichiers Vidéos{%endif%}
+{% endblock%}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/del.js"></script>
+<script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+
+{% for a in src.object_list %}
+<div id="object">
+  <h3><a href="{% url videos a.id_ensfile%}">{{a.name_ensfile}}</a></h3>
+<div id="objectlogo">
+  <img src="/users/static/images/sources_video.png">
+</div>
+	<div id="formodif{{a.id_ensfile}}">
+<div id="objectcontent">
+ <ul>
+	{%if a.desc_ensfile%}{%ifnotequal a.desc_ensfile "None"%}<li> Description : {{a.desc_ensfile}} </li>{%endifnotequal%}{%endif%}
+	{%if a.KW.all%}<li> {%if request.session.lang == 'en'%}Keywords{%else%}Mots clefs{%endif%} : {%for kw in a.KW.all%}  <a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}</li>{%endif%}
+	</ul>
+
+</div>
+<div id="objectscontentmore">
+  <ul>
+	{%if a.manager == me or a.manager.id_boss == me.id_user%}
+	<li>
+	<input type="button" value={%if request.session.lang == 'en'%}"Delete"{%else%}"Supprimer"{%endif%} onclick="del_media({{a.id_ensfile}})">
+			  <input type="button"  value={%if request.session.lang == 'en'%}"Modify"{%else%}"Modifier"{%endif%} onclick="m_media({{a.id_ensfile}})">
+	</li>
+	{%endif%}
+	</ul>
+</div>
+{%include "bottom.html" with s=a%}
+</div>
+</div>
+
+{%endfor%}
+<br>
+{%include "pagination.html" with OBJ=src%}
+<br>
+
+
+ {% endblock %}

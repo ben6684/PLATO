@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+  {% block head_title %} {%if request.session.lang == 'en'%}images informations{%else%}Informations des images{%endif%} {% endblock %}
+
+  {%block head_js%}
+  <script type="text/javascript" src="/users/static/js/del.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/highslide/highslide.js"></script>
+<script type="text/javascript">
+    hs.graphicsDir = '/users/static/js/highslide/graphics/';
+</script>
+{%endblock%}
+
+{%block head_css%}
+<link rel="stylesheet" type="text/css" href="/users/static/js/highslide/highslide.css" />
+  {%endblock%}
+
+  {% block content %}
+
+  <br>
+	{% if error_message %}<p><strong>{{ error_message|safe}}</strong></p>{% endif%}
+	  <p align='center'>
+		{%if request.session.lang == 'en'%}Download the ZIP archive{%else%}Télécharger l'archive ZIP{%endif%}<a href="{%url download_zip_archive ef.id_ensfile%}"> {{ef.name_ensfile}}.zip</a><br />
+	  </p>
+	<br>
+
+	  <!--    <p align="center">Number of file :  {{cnt}} -->
+
+	  <!-- 	{%if f.auth_src == 3 %} -->
+	  <!-- 	<input type="button"  value="Delete all" onclick="del_source({{nc}})"> -->
+	  <!-- 	{%endif%} -->
+	  <!-- </p> -->
+
+		<div id="algo">
+		  <div class="galerie">
+			{%for a in Img.object_list%}
+			<div class="figurebox">
+			  <a href="/root/{{a.file.path}}" class="highslide"  onclick="return hs.expand(this)"> 	
+				<img src="/root/{{a.file.show_thumb}}" height="150" id="{{a.file.id_file}}">
+			  </a> 	
+			  <div class='highslide-caption' id="caption-for-{{a.file.id_file}}" style="min-height:300px;">
+				<div id="cap">
+				  
+				  <h3><a href="/util/download/{{a.file.id_file}}">{{a.file.name_file}}</a></h3> 
+
+				  <div id="file_modif_{{a.file.id_file}}">
+					  {%if a.file.desc_file%} Description : {{a.file.desc_file}} <br>{%endif%}
+					  {%if a.file.size_file%} {%if request.session.lang == 'en'%}Size{%else%}Taille{%endif%} : {{a.file.size_file|filesizeformat}} <br>{%endif%}
+						<br>
+					  {%if a.file.manager = me or a.file.manager.id_boss = me.id_user%}
+					  {%if request.session.lang == 'en'%}Management{%else%}Gestion{%endif%} : <a href=# onclick="m_file({{a.file.id_file}})">{%if request.session.lang == 'en'%}Modify{%else%}Modifier{%endif%}</a>	&nbsp;&nbsp; <a href="#" onclick="del_file({{a.file.id_file}})">{%if request.session.lang == 'en'%}Delete{%else%}Supprimer{%endif%}</a><br>
+					  {%endif%}			
+								<br>
+								{%include "bottom.html" with s=a.file%}
+				  <br>{%if request.session.lang == 'en'%}
+				  <a href="#" onclick="return hs.previous(this)" title="Previous (left arrow key)" style="float:left;"><img src="/users/static/images/previous.png">previous</a>
+				  
+				  <a href="#" onclick="return hs.next(this)" title="Next (right arrow key)" style="float:right;">Next<img src="/users/static/images/next.png"></a>
+								  {%else%}
+				  <a href="#" onclick="return hs.previous(this)" title="Précédente (flèche gauche)" style="float:left;"><img src="/users/static/images/previous.png">Précédente</a>
+				  
+				  <a href="#" onclick="return hs.next(this)" title="Prochaine (flèche droite)" style="float:right;">Prochaine<img src="/users/static/images/next.png"></a>
+								  {%endif%}
+								  
+				  </div>
+				</div>
+			  </div>
+			  <br>
+				<div class="captionbox">
+				  <a href="/util/download/{{a.file.id_file}}">{{a.file.name_file}}</a>
+				</div>
+			</div>
+			{%endfor%}
+		  </div>
+		</div>
+	  
+	  {%include "pagination.html" with OBJ=Img%}
+	  <br>
+
+		
+		{% endblock %}

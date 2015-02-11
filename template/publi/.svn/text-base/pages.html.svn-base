@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block head_title %} PLATO {% endblock %}
+
+{%block head_js%} 
+<script type="text/javascript" src="/users/static/js/del.js"></script> 
+<script type="text/javascript" src="/users/static/js/util.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+
+{%endblock%}
+
+{% block title %}
+{%if request.session.lang == 'en'%}Latest articles{%else%}Dernières publications{%endif%}
+{% endblock%}
+
+{%load plato_extras%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+
+
+<form enctype="multipart/form-data" action="{%url vpages%}" method="post">{% csrf_token %}
+  <table align="center">
+		{%for field in form%}
+		<tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>	
+		{%endfor%}
+  </table>
+  <p align="center"><input type="submit" value="Validate the formular"/></p>
+</form>
+
+{%if flag%}
+{%regroup pages by mon as pag_mon%}
+{%else%}
+{%regroup pages by annee as pag_mon%}
+{%endif%}
+
+
+{%for page in pag_mon%}
+
+
+{%if flag%}
+<h4> {{page.grouper|month_name}}</h4>
+{%else%}
+<h4> {{page.grouper}}</h4>
+{%endif%}
+
+{%for p in page.list%}
+<div id="article">
+	<div id="article-infos">
+	  <h3>{%if p.abstract%}<a href="{%url vpage p.id_page%}">{{p.titre}}</a>{%else%}{{p.titre}}{%endif%}</h3>
+	  <author>
+		  {%for a in p.author.all%} 
+		    {% if not forloop.last %}
+		      {%if a.id_user%}
+		      <a href="{%url usr a.id_user.login%}"> {{a.fstnm_i}}. {{a.nm}}</a>, 
+		      {%else%}
+		       {{a.fstnm_i}}. {{a.nm}}, 
+		      {% endif %}
+		    {% else %}
+		      {%if a.id_user%}
+		      <a href="{%url usr a.id_user.login%}">{{a.fstnm_i}}. {{a.nm}}</a>
+		      {% else %}
+		      {{a.fstnm_i}}. {{a.nm}}
+		      {% endif %}
+		  {% endif %} 
+		  {%endfor%}
+		</author>, 
+	  <conf>{%ifnotequal p.id_conf None%} {{p.id_conf.titre_conf}} {%else%} {{p.conf_raw}}{%endifnotequal%},{%ifnotequal p.mois None%} {{p.mois}} {%endifnotequal%}{%ifnotequal p.annee None%} {{p.annee}} {%endifnotequal%} </conf>
+	</div>
+	<div id="article-dl">
+		&nbsp;
+	  {%if p.id_article %}<a href="/util/download/{{p.id_article.id_file}}" target="_blank"><img src="/users/static/images/f_pdf_32.png"></a>{%endif%}
+	  {%if p.id_presentation %}<a href="/util/download/{{p.id_presentation.id_file}}" target="_blank"><img src="/users/static/images/prez_32.png"></a>{%endif%}
+		{%for a in p.author.all%}{%if a.id_user%} {%if a.id_user.login == request.session.login %} <input type="button" value={%if request.session.lang == 'en'%}"Modify"{%else%}"Modifier"{%endif%} onclick="self.location.href='/add_publi/upd/{{p.id_page}}/'">{%endif%}{%endif%}{%endfor%}
+	</div>
+</div>
+{%endfor%}
+{%endfor%}
+
+<br>
+<div class="pagination">
+    <span class="step-links">
+		  {%if annee|add:-1 > 1969%}
+		  {%if annee|add:-1 > 1970%}
+		  <a href="?annee=1970"> 1970</a>     << 
+		  {%endif%}
+		  <a href="?annee={{annee|add:-1}}"> {{annee|add:-1}} </a> < 
+		  {%endif%}
+		  <span class="current">
+            |  {{annee}}  | 
+		  </span>
+		  {%if annee|add:1 < ty|add:1 %}
+		  > <a href="?annee={{annee|add:1}}"> {{annee|add:1}}</a>    
+		  {%if annee|add:1 < ty%}
+		  >> <a href="?annee={{ty}}"> {{ty}} </a>
+		  {%endif%}
+		  {%endif%}
+		  
+		  
+    </span>
+</div>
+ {% endblock %}
+

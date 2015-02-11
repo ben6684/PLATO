@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+  {% block head_title %} File information {% endblock %}
+
+  {%block head_js%}
+  <script type="text/javascript" src="/users/static/js/del.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+  {%endblock%}
+
+  {% block title %}
+  File information
+  {% endblock%}
+
+  {% block content %}
+
+  {% if error_message %}<p><strong>{{ error_message|safe}}</strong></p>{% endif%}
+  
+  {%for a in files.object_list%}
+  <div id="object">
+	<h3>{{a.name_file}}</h3>
+	<div id="objectlogo">
+	  <img src="/users/static/images/sources_file.png">
+	</div>
+	<div id="file_modif_{{a.id_file}}">
+	  <div id="imagecontent">
+		<ul>
+		  {%ifnotequal a.desc_file 'None'%}{%if a.desc_file%}<li> Description : {{a.desc_file}} </li>{%endif%}{%endifnotequal%}
+		  {%ifnotequal a.size_file None%}<li> Size : {{a.size_file|filesizeformat}} </li>	{%endifnotequal%}
+		  {%if a.date_del|date:'y' < 99 %} Expiration date : {{a.date_del}}<br>{%endif%}
+	<li>	File :<a href="{%url download_mma a.id_file%}"> {{a.path}}</a></li>
+			
+		</ul>
+	  </div>
+	  <div id="imagecontentmore">
+		  {%if a.manager = me %}
+		  <a href=# onclick="m_file({{a.id_file}})">Modify</a>
+			<a href=# onclick="del_file({{a.id_file}})">Delete</a> <br>
+			  {%endif%}
+			  {%ifequal a.type_file.id_type_file 1%}
+			  <button id="button_show_files2_{{a.id_file}}" type="button" onclick="Show_files2({{a.id_file}})">preview</button><br>
+				<div id="div_more{{a.id_file}}"></div>
+				{%endifequal%}
+				{%if a.KW.all%} Keywords : {%for kw in a.KW.all%}<a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}{%endif%}
+				{%if a.file.group%} <li> Project : <a href="{%url grp a.file.group.id_group%}">{{a.file.group.name_group}} </li>{%endif%}
+	  </div>
+		<div id="objectbottom">
+		  Created the <b>{{a.date_creation|date:"j M Y"}}</b> by <a href="{%url usr a.manager.login%}">{{a.manager.fstnm_person}} {{a.manager.nm_person}}</a> {%ifnotequal a.date_creation|date:"jny" a.date_modification|date:"jny"%} - last modified : {{a.date_modification|date:"j M Y"}}{%endifnotequal%}
+		</div>
+	</div>
+  </div>
+  {%endfor%}
+  
+  {%include "pagination.html" with OBJ=files%}
+  {% endblock %}

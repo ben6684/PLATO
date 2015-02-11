@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/del.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+{% block head_title %}{%if request.session.lang == 'en'%}Videos informations{%else%}Informations sur les vidéos{%endif%} {% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}Videos informations{%else%}Informations sur les vidéos{%endif%}
+{% endblock%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+	  <p align='center'>
+		{%if request.session.lang == 'en'%}Download the ZIP archive{%else%}Télécharger l'archive ZIP{%endif%}<a href="{%url download_zip_archive ef.id_ensfile%}"> {{ef.name_ensfile}}.zip</a><br />
+	  </p>
+<br>
+{% for a in Vid.object_list %}
+<div id="object">
+  <h3><a href="{% url download_mma a.file.id_file%}">{{a.file.name_file}}</a></h3>
+<div id="objectlogo">
+  <img src="/users/static/images/sources_video.png">
+</div>
+	<div id="file_modif_{{a.file.id_file}}">
+<div id="objectcontent">
+ <ul>	
+			  <li> {%if request.session.lang == 'en'%}File{%else%}Fichier{%endif%} :  <a href="{% url download_mma a.file.id_file%}"> {{a.file.path}} </a>
+				<!-- {%if a.file.path|slice:"-3:" == "mp4"%} -->
+				<!-- <video width="320" height="240" controls="controls" src="/root/{{a.file.path}}"> -->
+				<!--   {%else%} -->
+				<!--   <embed type="application/x-vlc-plugin"  -->
+				<!-- 	name="video1"  -->
+				<!-- 	autoplay="no" loop="yes" width="400" height="300"  -->
+				<!-- 	target="/root/{{a.file.path}}" />  -->
+				<!--   {%endif%} -->
+				{%ifnotequal a.file.desc_file "None"%}<li> Description : {{a.file.desc_file}} </li>{%endifnotequal%}
+	</ul>
+<!--EMBED SRC="{{a.file.path}}" CONTROLS="true" LOOP="-1" AUTOSTART="true" HEIGHT="200" WIDTH="320" BORDER="0"-->
+</div>
+<div id="objectcontentmore">
+  <ul>
+	</li>
+	<li> {%if request.session.lang == 'en'%}Size{%else%}Taille{%endif%} : {{a.file.size_file|filesizeformat }} </li>
+	{%if a.file.group%} <li> {%if request.session.lang == 'en'%}Project{%else%}Projet{%endif%} : <a href="{%url grp a.file.group.id_group%}">{{a.file.group.name_group}} </a></li>{%endif%}
+	<li> {%if request.session.lang == 'en'%}Duration{%else%}Durée{%endif%} : {{a.duration|time:"H:i:s"}} </li>
+	{%if a.file.KW.all%}<li> {%if request.session.lang == 'en'%}Keywords{%else%}Mots clefs{%endif%} : {%for kw in a.file.KW.all%} <a href="/search?KW={{kw}}">{{kw}}</a>,  {%endfor%}</li>{%endif%}
+	{%if a.file.manager == me or a.file.manager.id_boss == me.id_user%}
+	<li>
+	<input type="button" value={%if request.session.lang == 'en'%}"Modify"{%else%}"Modifier"{%endif%} onclick="m_file({{a.file.id_file}})">
+	<input type="button" value={%if request.session.lang == 'en'%}"Delete"{%else%}"Supprimer"{%endif%} onclick="del_file({{a.file.id_file}})">
+	</li>
+	{%endif%}
+	</ul>
+</div>
+	{%include "bottom.html" with s=a.file%}
+</div>
+</div>
+
+{%endfor%}
+<br>
+{%include "pagination.html" with OBJ=Vid%}
+<br>
+ {% endblock %}

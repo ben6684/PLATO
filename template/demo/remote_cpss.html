@@ -1,0 +1,145 @@
+{% extends 'demo/demo_template.html' %}
+
+  {%block head_js%}
+  <script type="text/javascript" src="/users/static/js/del.js"></script>
+  <script type="text/javascript" src="/users/static/js/view.js"></script>
+  <script type="text/javascript" src="/users/static/js/form.js"></script>
+    <script type="text/javascript" src="/users/static/js/webgl/glMatrix-0.9.5.min.js"></script>
+    <script type="text/javascript" src="/users/static/js/webgl/webgl-utils.js"></script>
+    <script type="text/javascript" src="/users/static/js/webgl/camera.js"></script>
+    <script type="text/javascript" src="/users/static/js/webgl/pointset.js"></script>
+    <script type="text/javascript" src="/users/static/js/webgl.js"></script>
+    <script type="text/javascript" src="/users/static/js/viewer.js"></script>
+
+<script id="shader-fs" type="x-shader/x-fragment">
+precision mediump float;
+
+//varying vec2 vTextureCoord;
+varying vec3 vLightWeighting;
+varying vec3 normal;
+
+uniform float uAlpha;
+
+//uniform sampler2D uSampler;
+
+uniform bool uUseTexturing;
+uniform bool uSmoothedPoint;
+uniform bool uPointSet;
+
+void main(void) {
+    vec4 textureColor = vec4(1., 1., 1., 1.);
+
+    if(uPointSet)
+    {
+        if(uSmoothedPoint)
+        {
+            float r = (gl_PointCoord.s-0.5)*(gl_PointCoord.s-0.5)
+                    + (gl_PointCoord.t-0.5)*(gl_PointCoord.t-0.5);
+            r = 1.-4.*r;
+            if(r<0.0) discard;
+        }
+    }
+        gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
+}
+
+</script>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+attribute vec3 aVertexPosition;
+attribute vec3 aVertexNormal;
+//attribute vec2 aTextureCoord;
+
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+uniform mat3 uNMatrix;
+
+uniform vec3 uAmbientColor;
+
+uniform vec3 uLightingDirection;
+uniform vec3 uDirectionalColor;
+uniform vec3 uLightingDirection2;
+uniform vec3 uDirectionalColor2;
+
+uniform bool uUseLighting;
+
+uniform float uPointSize;
+
+//varying vec2 vTextureCoord;
+varying vec3 vLightWeighting;
+varying vec3 normal;
+
+
+
+
+
+
+void main(void) {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_PointSize = uPointSize;
+    //vTextureCoord = aTextureCoord;
+
+    if (!uUseLighting) {
+        vLightWeighting = vec3(1.0, 1.0, 1.0);
+    } else {
+        vec3 transformedNormal = uNMatrix * aVertexNormal;
+        normal = transformedNormal;
+        float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+        float directionalLightWeighting2 = max(dot(transformedNormal, uLightingDirection2), 0.0);
+        vec3 uLightingDirection3 = vec3(-438., 167., -48.);
+        uLightingDirection3 = normalize(uLightingDirection3);
+        vec3 uDirectionalColor3 = vec3(1.0, 0.69, 0.23);
+        float directionalLightWeighting3 = max(dot(transformedNormal, uLightingDirection3), 0.0);
+        vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting
+                                        + uDirectionalColor2 * directionalLightWeighting2
+                                        + uDirectionalColor3 * directionalLightWeighting3;
+        vLightWeighting.r = vLightWeighting.r>1.0?1.0:vLightWeighting.r;
+        vLightWeighting.g = vLightWeighting.g>1.0?1.0:vLightWeighting.g;
+        vLightWeighting.b = vLightWeighting.b>1.0?1.0:vLightWeighting.b;
+    }
+}
+</script>
+  {%endblock%}
+{%block titre%} ACC {%endblock%}
+{%block autors%} Benoit Petitpas {%endblock%}
+{%block description%}<p> Description : <br>Do a approximate nearest neighbor filtering to filter small point cluster  <br></p>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}{%endblock%}
+<br>
+  {%block input%}
+
+ <form enctype="multipart/form-data" action="{%url remote_cpss%}" method="post">{% csrf_token %}
+
+<div id="selection_input">
+<p style="font-size:150%;">Input point cloud (< 20Mb) : <input type="file" name="input"/> </p><br>
+<input type="submit" id="id_remote_cpss" name="remote_cpss" value="    Run    "/>
+</div>
+
+<div id="fiche">
+
+<div id="lefo">{{example}} 
+<br><input type="button" value={%if request.session.lang == 'en'%}"show the object"{%else%}"Afficher l'objet"{%endif%} onclick="initViewer('/root/{{example}}')">
+</div>
+
+<div id="lefo">
+{{response}}
+<br><input type="button" value={%if request.session.lang == 'en'%}"show the object"{%else%}"Afficher l'objet"{%endif%} onclick="initViewer('/root/{{response}}')">
+</div> 
+
+</div> 
+
+  	<div id="object">
+					<div id="filenoption" style="text-align:left;display:inline-block;vertical-align: top;">
+							<h3 style="color:#990000;"> Options </h3>
+				  <ul>
+				  <li><input type="checkbox" id="pointSet" checked />{%if request.session.lang == 'en'%}PointSet{%else%}Ensemble de points{%endif%}</li>
+					<li><input type="checkbox" id="smoothedPoint" checked /> {%if request.session.lang == 'en'%}Smoothed points{%else%}Points lissés{%endif%}</li>
+					<li>{%if request.session.lang == 'en'%}Points Size{%else%}Taille des points{%endif%}<input type="text" id="pointSize" value="1.0" /></li>
+				  </ul>
+						  </div>
+				  <div id="viewer2" onresize="updateGL()">
+					<canvas id="viewer-canvas"></canvas>
+				  </div>
+				</div>
+
+</form>
+{%endblock%}
+  {%block resultat%} {%endblock%}

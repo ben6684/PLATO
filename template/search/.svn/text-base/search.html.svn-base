@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}Search page{%else%}Page de recherche{%endif%}{% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}Search results{%else%}Résultats de la recherche{%endif%}
+{% endblock%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+<hr>
+
+{%if u%}
+<h3> {%if request.session.lang == 'en'%}Users{%else%}Utilisateurs{%endif%} </h3>
+{%for a in u%}
+<a href="{%url usr a.login%}">{{a.nm_person}} {{a.fstnm_person}}</a><br>
+{%endfor%}
+<hr>
+{%endif%}
+
+
+{%if g%}
+<h3> {%if request.session.lang == 'en'%}Projects{%else%}Projets{%endif%} </h3>
+{%for a in g%}
+<a href="{%url grp a.id_group%}">{{a.name_group}}</a><br>
+{%endfor%}
+<hr>
+{%endif%}
+
+
+{%if t%}
+<h3> {%if request.session.lang == 'en'%}Tools{%else%}Outils{%endif%} </h3>
+{%for a in t%}
+<li type="circle" style="margin:0px 0px 6px 15px;"><a href="{%url vcode a.id_tool%}">{{a.name_tool}}</a>, <i>{%for au in a.get_tool_author%}{%if au.id_user%}<a href="{%url usr au.id_user.login%}">{{au.fstnm_i}} {{au.nm}}</a>,{%else%}{{au.fstnm_i}} {{au.nm}},{%endif%}{%endfor%}</i>  <b>{{a.date_creation}} </b>, {%if request.session.lang == 'en'%}keywords{%else%}mots clefs{%endif%}: <small>{%for kw in a.KW.all%}<a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}</small></li><br>
+{%endfor%}
+<hr>
+{%endif%}
+
+
+{%if p%}
+<h3> Publications</h3>
+{%for a in p%}
+{%if a.abstract%}
+<li type="circle" style="margin:0px 0px 6px 15px;"><a href="{%url vpage a.id_page%}">{{a.titre}}</a>, <i> {%for au in a.author.all%}{%if au.id_user%}<a href="{%url usr au.id_user.login%}">{{au.fstnm_i}} {{au.nm}}</a>,{%else%}{{au.fstnm_i}} {{au.nm}}, {%endif%}{%endfor%}</i> {{a.conf_raw}}, <b> {{a.mois}} {{a.annee}}</b>{%if a.id_article %}<a href="/util/download/{{a.id_article.id_file}}">[PDF]</a>{%endif%} </li>
+{%else%}
+<li type="circle" style="margin:0px 0px 6px 15px;">{{a.titre}}, <i> {%for au in a.author.all%}{%if au.id_user%}<a href="{%url usr au.id_user.login%}">{{au.fstnm_i}} {{au.nm}},</a>,{%else%} {{au.fstnm_i}} {{au.nm}},{%endif%}{%endfor%}</i> {{a.conf_raw}}, <b> {{a.mois}} {{a.annee}}</b>{%if a.id_article %}<a href="/util/download/{{a.id_article.id_file}}">[PDF]</a>{%endif%} </li>
+{%endif%}
+{%endfor%}
+<hr>
+{%endif%}
+
+
+{%if ef%}
+<h3> {%if request.session.lang == 'en'%}Data{%else%}Données{%endif%} </h3>
+{%for a in ef%}
+<a href="{%url files a.id_ensfile%}">{{a.name_ensfile}}</a>,<i> {{a.type_ens_file}}</i>, <b> {{a.date_creation}} </b><br>
+{%endfor%}
+<hr>
+{%endif%}
+
+
+ {% endblock %}

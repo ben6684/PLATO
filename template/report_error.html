@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+     <title>Report a bug</title>
+  </head>
+
+  <body>
+    <h1>Error report</h1>
+	<div id="report_bug">
+	  <form action="{% url report_error %}" method="post" id="report_error">
+		<table>
+		  {% csrf_token %}
+		  {{ form.non_field_errors }}
+		  {{ form.as_table}}
+		</table>
+		<p align="center"><input type="submit" value="Report" id="sendbutton"/></p>
+	  </form>
+	</div>
+  </body>
+</html>

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+  {% block head_title %} PLATO {% endblock %}
+
+  {%block head_js%} 
+  <script type="text/javascript" src="/users/static/js/del.js"></script> 
+  <script type="text/javascript" src="/users/static/js/util.js"></script>
+  <script type="text/javascript" src="/users/static/js/view.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script type="text/javascript" src="/users/static/js/form.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+  {%endblock%}
+
+  {% block title %}
+  {{ User.fstnm_person }}  {{ User.nm_person }}
+  {% endblock%}
+
+  {% block session %}
+  {% endblock %}
+
+  {% block content %}
+  <br>
+	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+	<ul class="navbar">
+	  <li class="itembar"><a class="linkbar" href="."> Information{%if request.session.lang == 'fr'%}s{%endif%} </a></li>
+	  <li class="itembar"><a class="linkbar" href="#" onclick="user_infos('{{User.login}}',2);return false;"> {%if request.session.lang == 'en'%}Tools{%else%}Outils{%endif%}</a> </li>
+	  <li class="itembar"><a class="linkbar" href="#" onclick="user_infos('{{User.login}}',3);return false;"> Publications</a> </li>
+	  <li class="itembar"><a class="linkbar" href="#" onclick="user_infos('{{User.login}}',4);return false;"> Media</a> </li>
+	</ul>
+	  <div id="INFOS">
+	  <div id="fiche" >
+	
+	  <!-- <div id="lefty" {%if not User.actif%}  style="background-color:#cccccc;"{%endif%}> -->
+		<div id="topy" {%if not User.actif%} style="background-color:#cccccc;"{%endif%}>
+		  <div id="togepy">
+			
+		  <table>
+			<tr><td valign="top" width="10%">
+				<img src="/plato/plato_users/{{User.login}}/profil.jpg" width="100px" alt=" " onerror="this.onerror=null;this.src='/users/static/images/empty-face.jpg';" >
+			  </td>
+			  <td width="90%">
+			<table style="margin : 10px auto auto auto;" align="center">
+				 <tr colspan="2"> <h3>{%if request.session.lang == 'en'%}Personal Information{%else%}Informations personnelles{%endif%} </h3></tr>
+			  <tr><td> {%if request.session.lang == 'en'%}Last Name{%else%}Nom{%endif%} </td><td> : </td><td>  {{User.nm_person}}</td></tr>
+			  <tr><td> {%if request.session.lang == 'en'%}First name{%else%}Prénom{%endif%}</td><td> : </td><td> {{User.fstnm_person}}</td></tr>
+			  {%if User.webpage_person%}<tr><td> {%if request.session.lang == 'en'%}Webpage{%else%}Page web{%endif%}</td><td> : </td><td> <a href={{User.webpage_person}}>{{User.webpage_person}}</a></td></tr>{%endif%}
+			  {%if User.email_person%}<tr><td> Email</td><td> : </td><td> {{User.email_person}}</td></tr>{%endif%}
+			  {%if User.office%}<tr><td> {%if request.session.lang == 'en'%}Office{%else%}Bureau{%endif%}</td><td> : </td><td> {{User.office}}</td></tr>{%endif%}
+
+			  {%if User.actif%}
+			  {%if User.status.nm_user_status%}<tr><td> {%if request.session.lang == 'en'%}Status{%else%}Statut{%endif%}</td><td> : </td><td> {{User.status.nm_user_status}}</td></tr>{%endif%}
+			  {%else%}
+			  <tr><td> {%if request.session.lang == 'en'%}Status{%else%}Statut{%endif%}</td><td> : </td><td> {%if request.session.lang == 'en'%}former {{User.status}} of TSI {%else%} ancien {{User.status}} de TSI{%endif%}{%if User.account_expiration_date|date:"Y" < 3000 %} {%if request.session.lang == 'en'%}who left on{%else%}qui est parti le {%endif%}{{User.account_expiration_date}}{%endif%}</td></tr>
+			  {%endif%}
+
+			  {%if User.account_expiration_date|date:"Y" < 3000 %}<tr><td> {%if request.session.lang == 'en'%}Expiration date{%else%}Date d'expiration{%endif%}</td><td> : </td><td> {{User.account_expiration_date}}</td></tr>{%endif%}
+			  
+			  {%if User.telephone%}<tr><td> {%if request.session.lang == 'en'%}Telephone{%else%}Téléphone{%endif%}</td><td> : </td><td> {{User.telephone}}</td></tr>{%endif%}
+			  <!--{%if boss.login%}<tr><td> Referent</td><td> : </td><td> <a href="/users/{{boss.login}}/"> {{boss.fstnm_person}} {{boss.nm_person}}</a></td></tr>{%endif%}-->
+
+			  <!-- <a href="{%url upd_biblio 'petitpas'%}"> plop </a> -->
+				 {%if User.login == 'petitpas'%}<tr><td>supprimer le tmp</td><td> : </td><td> <a href="{%url suppr_tmp%}"> plop </a></td></tr>{%endif%}
+				 {%if User.login == 'grenier'%}<a href="{%url readme%}"> README for new dev/ admin on PLATO</a><br>{%endif%}
+				 {%if User.login == 'richard'%}<a href="{%url readme%}"> README for new dev/ admin on PLATO</a><br>{%endif%}
+				 {%if User.login == 'petitpas'%}<a href="{%url readme%}"> README for new dev/ admin on PLATO</a><br>{%endif%}
+				 {%if User.login == 'grenier'%}<a href="/util/download/281448"> README file </a>{%endif%}
+				 {%if User.login == 'richard'%}<a href="/util/download/281448"> README file </a>{%endif%}
+				 {%if User.login == 'petitpas'%}<a href="/util/download/281448"> README file </a>{%endif%}
+				
+			  <!-- {%if User.login == 'petitpas'%}<a href="{%url prout%}"> plop </a>{%endif%} -->
+
+			</table>
+				</td></tr></table>
+			{%if request.session.lang == 'en' and User.biographie%}
+			<p align='center'>
+			  {{User.biographie|safe}}
+			</p>
+			{%elif request.session.lang == 'fr' and User.biographie_fr%}
+			<p align='center'>
+			  {{User.biographie_fr|safe}}
+			  {%else%}
+			  {%if User.biographie%}
+			  <p align='center'>
+				{{User.biographie|safe}}
+				{%elif User.biographie_fr%}
+				<p align='center'>
+				  {{User.biographie_fr|safe}}
+				</p>
+				{%endif%}
+				{%endif%}
+
+
+				{% if f %}
+				<p align='center'><a href="{%url usr_upd User.login%}"> {%if request.session.lang == 'en'%}Update info{%else%}Mettre à jour vos informations{%endif%} </a></p>	
+				{% endif %}
+		  </div>	
+			  <div id="togepy">
+			<h3> {%if request.session.lang == 'en'%}Latest Publications{%else%}Dernières publications{%endif%} </h3>
+			<br>
+			  {%for a in User.get_last_page%}
+			  <li>
+				{%if a.abstract%}<a href="{%url vpage a.id_page%}">{{a.titre}}</a>
+				{%else%}{{a.titre}}{%endif%},<br>
+
+				  <small><i> {%for au in a.author.all%}{%if au.id_user%}<a href="{%url usr au.id_user.login%}">{{au.fstnm_i}}. {{au.nm}}</a>, {%else%} {{au.fstnm_i}}. {{au.nm}}, {%endif%}{%endfor%}</i> {{a.conf_raw}}, <b> {{a.mois}} {{a.annee}}</b>{%if a.id_article %} <a href="/util/download/{{a.id_article.id_file}}"> [PDF]</a>{%endif%} {%if User.login == request.session.login%} <a href="/add_publi/upd/{{a.id_page}}/">{%if request.session.lang == 'en'%}Modify{%else%}Modifier{%endif%}</a>{%endif%}</small>
+			  </li>
+			  {%endfor%}
+			  <!-- ici ... pour afficher page avec filtre nom-->
+			  {%if User.author.page_set.all|length > 5 %}<p align="center"><a href="#" onclick="user_infos('{{User.login}}',3);return false;"><span style="font-size:32px;"> ... </span></a></p>{%endif%}
+
+		  </div>
+		</div>
+		<div id="topy" {%if not User.actif%} style="background-color:#cccccc;"{%endif%}>
+
+		  <!-- <div id="righty" {%if not User.actif%}  style="background-color:#cccccc;"{%endif%}> -->
+
+	  <div id="togepy">
+
+			<h3>{%if request.session.lang == 'en'%}{%if not User.actif%}Was {%endif%}Involved in projects{%else%}{%if not User.actif%}a été {%endif%}impliqué dans les projets{%endif%} :</h3>
+			<br>
+			  {% for u in User.group_users.all %}
+			  <a href="{%url grp u.id_group%}"> {{u.name_group}} </a>
+			  {% if f %}
+			  <input type="button" value={%if request.session.lang == 'en'%}"Quit"{%else%}"Quitter"{%endif%} onclick="quit_group('{{User.login}}',{{u.id_group}}) ">
+				{% endif %}
+				/	  
+				{% empty %}
+				{%if request.session.lang == 'en'%}You belong to no project{%else%}Vous n'appartenez à aucun projet{%endif%}
+				{% endfor %}
+		
+		  </div>
+
+		  <div id="togepy">
+			
+			<h3> {%if request.session.lang == 'en'%}Latest Tools{%else%}Derniers outils{%endif%}</h3>
+			<br>
+			  {%for a in User.tool_set.all|slice:"0:5"%}
+			  {%if a.visible or request.session.actif%}
+			  <li><a href="{%url vcode a.id_tool%}">{{a.name_tool}}</a>, 
+				<i>{%for au in a.get_tool_author%}{%if au.id_user%}<a href="{%url usr au.id_user.login%}">{{au.fstnm_i}}. {{au.nm}}</a>, {%else%}{{au.fstnm_i}}. {{au.nm}}, {%endif%}{%endfor%}</i>  <b>{{a.date_creation}} </b>, {%if request.session.lang == 'en'%}keywords{%else%}Mots clefs{%endif%}: <small>{%for kw in a.KW.all%}<a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%} {%if User.login == request.session.login%} <a href="/add_app/upd/{{a.id_tool}}/">{%if request.session.lang == 'en'%}Modify{%else%}Modifier{%endif%}</a>{%endif%}</small></li><br>
+				{%endif%}
+				{%endfor%}
+				
+		  </div>
+		<!-- </div> -->
+		<!-- <div id="topy" {%if not User.actif%} style="background-color:#cccccc;"{%endif%}> -->
+		  
+		  <div id="togepy">
+			<h3> {%if request.session.lang == 'en'%}Latest Media{%else%}Derniers Média{%endif%} </h3>
+			<br>
+			  {%for a in User.ensfile_set.all|slice:"0:5"%}
+			  {%if a.public or request.session.actif%}
+			  <li>
+				<a href="{%url files a.id_ensfile%}">{{a.name_ensfile}}</a>, <b>{{a.date_creation}} </b>, {%if request.session.lang == 'en'%}keywords{%else%}Mots clefs{%endif%}: <small>{%for kw in a.KW.all%}<a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%} {%if User.login == request.session.login%} <a href="/add_data/upd_ensfile/{{a.id_ensfile}}/">{%if request.session.lang == 'en'%}Modify{%else%}Modifier{%endif%}</a>{%endif%}</small></li><br>
+			  </li>
+				{%endif%}
+			  {%endfor%}
+		  </div>
+		  
+		  <div id="togepy">
+			<h3> {%if request.session.lang == 'en'%}Latest Demos{%else%}Dernières Démos{%endif%} </h3>
+			<br>
+			  {%for a in User.demo_set.all|slice:"0:5"%}
+			  <li>
+				<a href="{%url vdemo a.id_demo%}">{{a.name_demo}}</a>, <b>{{a.date_creation}} </b>,  <small> {%if User.login == request.session.login%} <a href="/demo/upd/{{a.id_demo}}/">{%if request.session.lang == 'en'%}Modify{%else%}Modifier{%endif%}</a>{%endif%}</small></li><br>
+			  </li>
+			  {%endfor%}
+		  </div>
+
+		</div>
+</div>
+	  </div>
+
+	  {% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block head_title %} PLATO {% endblock %}
+
+{%block head_js%} 
+<script type="text/javascript" src="/users/static/js/del.js"></script> 
+<script type="text/javascript" src="/users/static/js/util.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+
+{%endblock%}
+
+{% block title %}
+Latest articles
+{% endblock%}
+
+{%load plato_extras%}
+
+{% block content %}
+{%regroup pages by mon as pag_mon%}

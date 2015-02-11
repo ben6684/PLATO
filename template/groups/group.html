@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}Projects information{%else%}Informations des projets{%endif%} {% endblock %}
+
+{%block head_js%} 
+<script type="text/javascript" src="/users/static/js/del.js"></script> 
+<script type="text/javascript" src="/users/static/js/util.js"></script>
+<script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+{%endblock%}
+
+{% block title %}
+{%if request.session.lang == 'en'%}{{ gpe.name_group }} information{%else%} Informations de {{ gpe.name_group }}{%endif%}
+{% endblock%}
+
+{% block session %}
+
+{% endblock %}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<ul class="navbar">
+  <li class="itembar"><a class="linkbar" href="."> Informations</a></li>
+  <li class="itembar"><a class="linkbar" href="#" onclick="group_infos('{{gpe.id_group}}',2);return false;"> {%if request.session.lang == 'en'%}Tools{%else%}Outils{%endif%}</a> </li>
+  <li class="itembar"><a class="linkbar" href="#" onclick="group_infos('{{gpe.id_group}}',3);return false;"> Publications</a> </li>
+ 	  {%if request.session.login%} <li class="itembar"><a class="linkbar" href="#" onclick="group_infos('{{gpe.id_group}}',4);return false;"> Media</a> </li>{%endif%}
+  <!--<li class="itembar"><a class="linkbar" href="/users/{{User.login}}/object/"> Medias</a>-->
+	</ul>
+	<div id="INFOS">
+	  <div id="fiche"><!-- FIche  -->
+
+		<div id="topy" >
+		  <div id="togepy">
+	
+			<table>
+			  <tr><td valign="top" width="10%">
+				  <img src="/plato/projects/{{gpe.name_group}}/profil.jpg" height="80px" alt=" " onerror="this.onerror=null;this.src='/users/static/images/logo_telecom.png';" >
+				</td>
+				<td width="90%">
+				  <table style="margin-top:25px; text-align:center;" align="center">
+					<tr colspan="2"><h3>{%if request.session.lang == 'en'%}Project information{%else%}Informations du projet{%endif%} </h3></tr>
+					<!-- <table align='center'  border='1' border-style= 'solid'  width= '100%';> -->
+					<tr> <td> {%if request.session.lang == 'en'%}Name{%else%}Nom{%endif%} </td><td>:</td> <td> {{gpe.name_group}}</td></tr>
+					{%if gpe.webpage%} <tr> <td> {%if request.session.lang == 'en'%}Webpage{%else%}Page web{%endif%} </td><td>:</td> <td> <a href={{gpe.website}}>{{gpe.website}}</a></td></tr>{%endif%}
+					{%if gpe.email%} <tr> <td> Email </td><td>:</td> <td> {{gpe.email}}</td></tr>{%endif%}
+					{%if gpe.date_del|date:"Y" < 3000 %}<tr> <td> {%if request.session.lang == 'en'%}expiration date{%else%}Date d'expiration{%endif%}</td><td> :</td> <td> {{gpe.date_del}}</td></tr>{%endif%}
+					{%if gpe.desc_grou%}<tr> <td> Description </td><td>:</td> <td> {{gpe.desc_group|safe}}</td></tr>{%endif%}
+					<tr> <td> {%if request.session.lang == 'en'%}Keywords{%else%}Mots Clefs{%endif%} </td><td>: </td> <td> {%for kw in gpe.KW.all%}<a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}</td></tr>
+				  </table>
+
+				  <div style="margin-top:50px">
+					{% if f %}
+					<p align='center'><a href="{%url grp_upd gpe.id_group%}"> {%if request.session.lang == 'en'%}Edit project{%else%}Editer le projet{%endif%} </a></p>
+					<p align='center'><a href="{%url grp_del gpe.id_group%}"> {%if request.session.lang == 'en'%}Delete project{%else%}Supprimer le projet{%endif%} </a></p>
+					{% endif %}
+				  </div>
+				</td>
+			  </tr>
+			</table>
+		  </div>
+		  <div id="togepy">
+			<h3>{%if request.session.lang == 'en'%}Members of the project{%else%}Membres du projet{%endif%} :</h3>
+			
+			<table align='center' style="margin-top:15px;">
+			  
+			  {% for u in gpe.users.all %}
+			  {%if u.actif%}
+			  <tr><td> <a href="{%url usr u.login%}"> {{u.fstnm_person}} {{ u.nm_person }}</a></td>
+				{% if f %}
+				<td> </td><td> <a href="{%url grp_del_usr gpe.id_group u.login%}"> {%if request.session.lang == 'en'%}Delete{%else%}Supprimer{%endif%} </a></td>
+				{% endif %}
+			  </tr>
+			  {%endif%}
+			  
+			  
+			  {% empty %}
+			  <tr ><td> ...</td> <td>  {%if request.session.lang == 'en'%}Nobody actif in the project  !{%else%}Persone d'actif dans le projet{%endif%}</td></tr>
+			  {% endfor %}
+			  
+			</table>
+		  </div>
+
+		  <div id="bottomy">
+			<p align="center"> <b>{%if request.session.lang == 'en'%}Plato project manager{%else%}Gestionnaire du projet PLATO{%endif%}</b> : <a href="{%url usr gpe.manager.login%}"> {{gpe.manager.nm_person }} {{gpe.manager.fstnm_person}} </a></p>
+		  </div>
+		</div>
+	  <!-- <div id="foto"> -->
+	  <!-- 	<img src="/plato/projects/{{gpe.name_group}}/profil.jpg" height="80px" alt=" " onerror="this.onerror=null;this.src='/users/static/images/logo_telecom.png';" > -->
+	  <!-- </div> -->
+	  <!-- <div id="lefty"> -->
+	  <!-- 	<h3> {%if request.session.lang == 'en'%}Project information{%else%}Informations du projet{%endif%} </h3> -->
+		
+		<!-- <table style="margin-top:25px; text-align:center;" align="center"> -->
+		<!--   <\!-- <table align='center'  border='1' border-style= 'solid'  width= '100%';> -\-> -->
+		<!--   <tr> <td> {%if request.session.lang == 'en'%}Name{%else%}Nom{%endif%} </td><td>:</td> <td> {{gpe.name_group}}</td></tr> -->
+		<!--   {%if gpe.webpage%} <tr> <td> {%if request.session.lang == 'en'%}Webpage{%else%}Page web{%endif%} </td><td>:</td> <td> <a href={{gpe.website}}>{{gpe.website}}</a></td></tr>{%endif%} -->
+		<!--   {%if gpe.email%} <tr> <td> Email </td><td>:</td> <td> {{gpe.email}}</td></tr>{%endif%} -->
+		<!--   {%if gpe.date_del|date:"Y" < 3000 %}<tr> <td> {%if request.session.lang == 'en'%}expiration date{%else%}Date d'expiration{%endif%}</td><td> :</td> <td> {{gpe.date_del}}</td></tr>{%endif%} -->
+		<!--   {%if gpe.desc_grou%}<tr> <td> Description </td><td>:</td> <td> {{gpe.desc_group|safe}}</td></tr>{%endif%} -->
+		<!--   <tr> <td> {%if request.session.lang == 'en'%}Keywords{%else%}Mots Clefs{%endif%} </td><td>: </td> <td> {%for kw in gpe.KW.all%}<a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}</td></tr> -->
+		<!-- </table> -->
+	  <!-- 	<div style="margin-top:50px"> -->
+	  <!-- 	  {% if f %} -->
+	  <!-- 	  <p align='center'><a href="{%url grp_upd gpe.id_group%}"> {%if request.session.lang == 'en'%}Edit project{%else%}Editer le projet{%endif%} </a></p> -->
+	  <!-- 	  <p align='center'><a href="{%url grp_del gpe.id_group%}"> {%if request.session.lang == 'en'%}Delete project{%else%}Supprimer le projet{%endif%} </a></p> -->
+	  <!-- 	  {% endif %} -->
+	  <!-- 	</div> -->
+	  <!-- </div> -->
+	<div id="topy">
+		  <div id="togepy">
+	  <!-- <div id="righty"> -->
+	
+		<small>
+		  <h3 style="font-size:110%">{%if request.session.lang == 'en'%}Former members of the project{%else%}Anciens membres du projet{%endif%} :</h3>
+		  
+		  <table class="inactif" align="center" style="margin-top:15px;" cellspacing="0" >
+			
+			{% for u in gpe.users.all %}
+			{%if not u.actif%}
+			<tr><td> <a href="{%url usr u.login%}"> {{u.fstnm_person}} {{ u.nm_person }}</a></td>
+			  {% if f %}
+			  <td> </td><td> <a href="{%url grp_del_usr gpe.id_group u.login%}"> {%if request.session.lang == 'en'%}Delete{%else%}Supprimer{%endif%} </a></td>
+			  {% endif %}
+			</tr>
+			{%endif%}
+			
+
+			{% empty %}
+			<tr ><td> ...</td> <td>  {%if request.session.lang == 'en'%}No former members in the project  !{%else%}Pas d'anciens membres dans le projet{%endif%}</td></tr>
+			{% endfor %}
+
+		  </table>
+		</small>
+	  </div>
+</div>
+	</div><!-- FIche  -->
+	</div>
+
+	<br>
+	  {% endblock %}

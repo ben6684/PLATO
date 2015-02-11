@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}PLATO help{%else%}Aide PLATO{%endif%}{% endblock %}
+
+{%block head_js%} 
+<script type="text/javascript" src="/users/static/js/del.js"></script> 
+<script type="text/javascript" src="/users/static/js/util.js"></script>
+<script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+{%endblock%}
+
+{% block title %}
+  {%if request.session.lang == 'en'%}Getting started{%else%}Bien débuter{%endif%}
+{% endblock%}
+
+{% block session %}
+{% endblock %}
+
+{% block content %}
+  {% if error_message %}
+  <p><strong>{{ error_message }}</strong></p>
+  {% endif%}
+
+{%if request.session.lang == 'en'%}
+  <h3>New ? </h3>
+	The first thing that you will do on PLATO is create your user account, then you will be redirect to the user information page. <br>
+	<ul>
+	<li>Here you can find picture and videos explaining how to create a new user <br>
+		  <img src="/static/images/starting_guide/new_user_help.png" width="100%">
+	  </li>
+	  <li> Here you can find explaintions about the user space <br>
+		  <img src="/static/images/starting_guide/espace_perso_help.png" width="100%"><br>
+			<iframe width="420" height="345" src="http://www.youtube.com/embed/pPaPzvkboKw"></iframe>
+	  </li>
+	</ul>
+{%else%}
+  <h3>Nouveau ? </h3>
+	La première chose à faire dans PLATO est de créer son compte utilisateur après lequel vous serez rediriger vers votre page d'information personel. <br>
+	<ul>
+	<li>Ici vous trouvez des images et des vidéos expliquant comment créer son compte utilisateur <br>
+		  <img src="/static/images/starting_guide/new_user_help.png" width="100%">
+	  </li>
+	  <li> Ici vous trouverez des explications sur votre espace utilisateur <br>
+		  <img src="/static/images/starting_guide/espace_perso_help.png" width="100%"><br>
+			<iframe width="420" height="345" src="http://www.youtube.com/embed/pPaPzvkboKw"></iframe>
+	  </li>
+	</ul>
+
+{%endif%}		  
+			  
+	{%endblock%}

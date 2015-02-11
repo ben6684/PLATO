@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head_title %} PLATO Demos{% endblock %}
+{%block head_js%} 
+<script type="text/javascript" src="/users/static/js/del.js"></script> 
+<script type="text/javascript" src="/users/static/js/util.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+{%endblock%}
+
+{%block title%}Demos{%endblock%}
+{% block content %}
+	{% if error_message %}
+	<p><strong>{{ error_message }}</strong></p>
+	{% endif%}
+<ul>
+	{%for demo in demos%} 
+	<div id="object">
+	  <h3><a href="{%url vdemo demo.id_demo%}">{{demo}} </a></h3>
+		<div id="objectlogo">
+		  <img src="/users/static/images/demo.png">
+		</div>
+		<div id="soundcontentmore" style="margin:5px 0px 5px 75px;">
+		  {%if demo.desc_demo%}  Description : {{demo.desc_demo|safe}} {%endif%}
+		</div>
+		<div id="objectbottom">
+		  {%if request.session.lang == 'en'%}
+		  Created the <b>{{demo.date_creation|date:"j M Y"}}</b> by <a href="{%url usr demo.manager.login%}">{{demo.manager.fstnm_person}} {{demo.manager.nm_person}}</a> 
+		  {%else%}
+		  Créé le  <b>{{demo.date_creation|date:"j M Y"}}</b> par <a href="{%url usr demo.manager.login%}">{{demo.manager.fstnm_person}} {{demo.manager.nm_person}}</a> 
+		  {%endif%}
+		</div>
+	</div>
+		  
+	{%endfor%}
+
+</ul>
+{%endblock%}

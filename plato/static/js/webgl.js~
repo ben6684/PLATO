@@ -1,0 +1,11 @@
+
+function initViewer() {
+    webGLStart();
+
+    openFile("models/3DStar-nlpss.ply");
+
+    var canvas = document.getElementById("viewer-canvas");
+    canvas.addEventListener("dragover", handleDragOver, false);
+    canvas.addEventListener("drop", handleFileSelect, false);
+    // createMenu("params");
+}

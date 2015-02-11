@@ -1,0 +1,22 @@
+{%extends 'base.html'%}
+{% block head_title %} Add audio data {% endblock %}
+
+{%block title%} Add an audio something{%endblock%}
+
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+
+<div id="contentbox">
+<h3> Add audio dat on PLATO </h3>
+  <p> What kind of data do you want to add :</p>
+  <ul>
+	<li> <a href="{%url add_audio_corpus%}">A corpus/album </a>, a corpus is a set of data for a special purpose</li>
+	<li> <a href="{%url add_audio_solo %}">Musical files  </a>, musical sounds from a single instrument or an emsemble </li>
+	<li> <a href="{%url add_audio_nm%}"> A non musical sound</a>, from TV or whatever </li>
+  </ul>
+</div>
+
+{%endblock%}
+

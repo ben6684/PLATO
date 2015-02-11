@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}PLATO help{%else%}Aide PLATO{%endif%}{% endblock %}
+
+{%block head_js%} 
+<script type="text/javascript" src="/users/static/js/del.js"></script> 
+<script type="text/javascript" src="/users/static/js/util.js"></script>
+<script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+{%endblock%}
+
+{% block title %}
+ {%if request.session.lang == 'en'%}Help{%else%}Aide{%endif%}
+{% endblock%}
+
+{% block session %}
+{% endblock %}
+
+{% block content %}
+
+<div id="fiche" >
+<div id="fully">
+<h3>{%if request.session.lang == 'en'%}[Help] User Space{%else%}[Aide] Espace Utilisateur{%endif%}</h3>
+<table style="margin-top:25px; text-align:center; width:100%;" align="center">
+<tr><th>English</th> <th>Français</th></tr>
+<hr>
+<tr><td><iframe width="420" height="345" src="http://www.youtube.com/embed/pPaPzvkboKw"></iframe></td>
+<td><iframe width="420" height="345" src="http://www.youtube.com/embed/Q9sCCCDbQ-g"></iframe></td></tr>
+</table>
+</div>
+</div>
+
+<div id="fiche" >
+<div id="fully">
+<h3>{%if request.session.lang == 'en'%}[Help] Add data{%else%}[Aide] Ajouter des données{%endif%}</h3>
+ <p align="center"><a href="{%url help_add_data%}"><b>{%if request.session.lang == 'en'%}You can find here a explaination page{%else%}Vous pouvez trouver une page d'explication ici{%endif%} </b></a></p>
+<br />
+<table style="margin-top:25px; text-align:center; width:100%;" align="center">
+<tr><th>English</th> <th>Français</th></tr>
+<hr>
+<tr><td><iframe width="420" height="345" src="http://www.youtube.com/embed/u9y9aB6IooI"></iframe></td>
+<td><iframe width="420" height="345" src="http://www.youtube.com/embed/MJp-EOyf90E"></iframe></td></tr>
+</table>
+</div>
+</div>
+
+
+{%endblock%}

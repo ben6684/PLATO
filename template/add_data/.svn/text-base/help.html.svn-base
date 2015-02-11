@@ -1,0 +1,99 @@
+
+{% extends 'base.html' %}
+
+  {% block head_title %} Add data {% endblock %}
+
+
+  {% block title %}
+  Help add data
+  {% endblock%}
+
+  {% block content %}
+  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+  <div id="contentbox">
+	  <div id="fiche" >
+		<div id="fully">
+		  <h3> Add files to existing data </h3>
+	  
+		 <p> Use this option, if you want to add files to an existing gathering on PLATO. For example, if you want to add data to this "Plato Test" gathering:<br /></p>
+		  <img src="/users/static/images/add_files_to_data1.png"><br />
+		
+		  <p>I select add files to existing data :<br /></p>
+		  <img src="/users/static/images/add_files_to_data2.png"><br />
+
+		  <p>Then I select files and a type, here for example "multimodal" because the data "Plato Test" is multimodal (even if all the files i will had are sounds)<br />Then i just clicked on "validate the formular"<br /></p>
+		  <img src="/users/static/images/add_files_to_data3.png"><br />
+		</div>
+	  </div>
+
+
+	<div id="fiche" >
+	  <div id="fully">
+		<h3> Add new data </h3>
+
+		<p> Use thsi option if you want to create a new gathering of files, for example if you want to create a "Plato Test2" data which is a set of images of plato, you just clock on "Add new data"</p>
+		<img src="/users/static/images/add_data1.png" />
+		  <br />
+			<p class="left"> 
+			  Then fill the formular : 
+			  <ul class="formular">
+				<li><b>* Files</b> : a required field where you select the files you want to add, there is still no possibility to add a folder </li>
+				<li><b>* Name</b> : the name of the gathering that will appear on Plato, here it's "Plato test2"</li>
+				<li><b>Description</b> : You put everything that you want in here, every information on you're data. You can add HTML code (no Iframe, no input etc ...) for layout your text</li>
+				<li><b>* Type</b> : select what kind of files it is: images, sounds, videos, 3d models or a bit of some. Sometimes selecting a type will open a new formular for describing more clearly the data</li>
+				<li><b>Copyright</b> : is it copyrighted ?</li>
+				<li><b>Origin</b> : text that explain where this data come from, you can put here the company that give you the data or the university or the camera/micro that produce the data or anything that might help people to understand what are this data</li>
+		  <li><b>Date of delation</b> : Always on tomorrow date, be careful to change it or delete it if you want your data to be permanently on Plato </li>
+		  <li><b>Keywords</b> : select keywords that explains your data and separate then with a simple comma</li>
+		  <li><b>Group</b> : if the data are created or added for a specific project just select it in the list</li>
+		  <li><b>* Public ?</b> : if you choose a group then you can select if you want your data to be public or private to the group</li>
+		</ul>
+		  Then validate and it appears
+		</p>
+	  </div>
+	</div>
+
+	<div id="fiche" >
+	  <div id="fully">
+		<h3>Fill formular for data on PLATO </h3>
+		<p class="left"> This is the treaky part of Plato, for doing this, you need to first add your files ON Plato directly:
+		  <ol>
+
+		<li> For Linux, you just do a "cp -r [Your directory that contains the data] /tsi/plato/plato_tmp/" 
+			  <img src="/users/static/images/add_data_from_plato_linux.png">
+			  <ul>
+				<li> All of your data should be in ONE directory (doesn't matters the number of sub_folder)</li>
+				<li> the name of this folder should be the name of the gathering on Plato </li>
+				  <img src="/users/static/images/add_data_from_plato_linux.png">
+			  </ul>
+			</li>
+			<li> For Windows copy your data through scp, for example with winscp
+			  <ul>
+				<li> you can connect to the server with the adress "ssh.enst.fr"</li>
+				<li> enter your login/password </li>
+				<li> you're at your home /tsi/users/[your login]/, change the path with /tsi/plato/plato_tmp/ </li>
+				<li> copy your data (one folder containing all of your data) into this folder </li>
+			  </ul>
+			  </ol>
+		  </p>
+
+		<p class="left"> Then you click on "Fill formular for data on Plato" <br>
+
+			<img src="/users/static/images/add_data_from_plato.png">
+			Then fill the information<br>
+				<img src="/users/static/images/add_data_from_plato2.png">
+			  BE CAREFUL, the "* Name" should be filled with the name of the folder you add on plato
+<br />Finally the data are copied to the new location in plato 
+	<img src="/users/static/images/add_data_from_plato4.png">
+
+					  And the data are on Plato now
+	<img src="/users/static/images/add_data_from_plato3.png">
+			  </p>
+
+
+
+	  </div>
+	</div>
+
+  </div>
+  {% endblock %}

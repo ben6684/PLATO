@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/project/mmm/!svn/ver/2271/MMM/trunk/plato/util
+END
+manage_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/project/mmm/!svn/ver/2305/MMM/trunk/plato/util/manage_demo.py
+END
+views.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/project/mmm/!svn/ver/2275/MMM/trunk/plato/util/views.py
+END
+auth.py
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/project/mmm/!svn/ver/2272/MMM/trunk/plato/util/auth.py
+END
+tests.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/project/mmm/!svn/ver/1462/MMM/trunk/plato/util/tests.py
+END
+updobjects.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/project/mmm/!svn/ver/2112/MMM/trunk/plato/util/updobjects.py
+END
+object_util.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/project/mmm/!svn/ver/2236/MMM/trunk/plato/util/object_util.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/project/mmm/!svn/ver/2273/MMM/trunk/plato/util/urls.py
+END
+object_util.pyc
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/project/mmm/!svn/ver/2271/MMM/trunk/plato/util/object_util.pyc
+END
+upd_biblio.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/project/mmm/!svn/ver/2242/MMM/trunk/plato/util/upd_biblio.py
+END

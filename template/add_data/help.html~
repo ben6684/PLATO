@@ -1,0 +1,16 @@
+
+{% extends 'base.html' %}
+
+  {% block head_title %} Add data {% endblock %}
+
+
+  {% block title %}
+  Add data on PLATO
+  {% endblock%}
+
+  {% block content %}
+  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+   <div id="contentbox">
+	<h3> Help </h3>
+  </div>
+  {% endblock %}

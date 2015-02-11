@@ -1,0 +1,22 @@
+
+
+<div class="pagination">
+    <span class="step-links">
+ 
+        {% if mul.number > 1  %}
+          <a href="?page=1"> << first </a>  |  
+        {% endif %}  
+        {% if mul.has_previous %}
+            <a href="?page={{ mul.previous_page_number }}"> < previous</a>
+        {% endif %}
+        <span class="current">
+            |  Page {{ mul.number }} of {{ mul.paginator.num_pages }}  | 
+        </span>
+        {% if mul.has_next %}
+             <a href="?page={{ mul.next_page_number }} ">next > </a> 
+        {% endif %}
+         {% if mul.number < mul.paginator.num_pages %}
+            |  <a href="?page={{ mul.paginator.num_pages }}">last >> </a>
+        {% endif %}
+    </span>
+</div>

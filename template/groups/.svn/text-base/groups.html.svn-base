@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block head_title %}{%if request.session.lang == 'en'%}Projects{%else%}Projets{%endif%}{% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}Projects{%else%}Projets{%endif%}
+{% endblock%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+
+{% for a in gpes.object_list %}
+<div id="object">
+  <h3><a href="{% url grp a.id_group%}">{{a.name_group}}</a></h3>
+	<div id="file_modif_{{a.id_group}}">
+<div id="objectcontent">
+
+ <ul>
+	{%ifnotequal a.desc_group None%}<li> Description : {{a.desc_group|safe}} </li>{%endifnotequal%}
+	{%ifnotequal a.date_creation a.date_modification%} <b>{%if request.session.lang == 'en'%}Last modified{%else%}Modifié le{%endif%}</b>  : {{a.date_modification}}<br>{%endifnotequal%}
+	{%if a.KW.all%}<li> {%if request.session.lang == 'en'%}Keywords{%else%}Mots Clefs{%endif%}  : {%for kw in a.KW.all%} <a href="/search?KW={{kw}}">{{kw}}</a>,  {%endfor%}</li>{%endif%}
+	</ul>
+
+</div>
+<div id="objectscontentmore">
+  <ul>
+	{%if a.manager == me%}
+	<li>
+	<input type="button" value={%if request.session.lang == 'en'%}"Modify"{%else%}"Modifier"{%endif%} onclick="del_media({{a.id_group}})">
+	<input type="button" value={%if request.session.lang == 'en'%}"Delete"{%else%}"Supprimer"{%endif%} onclick="del_media({{a.id_group}})">
+	</li>
+	{%endif%}
+	</ul>
+ 
+</div>
+{%include "bottom.html" with s=a%}
+</div>
+</div>
+
+{%endfor%}
+<br>
+{%include "pagination.html" with OBJ=gpes%}
+<br>
+
+
+ {% endblock %}

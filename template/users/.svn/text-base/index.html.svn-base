@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+  {% block content %}
+
+  {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+
+  <div id="content">
+	<!-- <div id="blockk"> -->
+	<!-- <h3> PLATO presentation</h3> -->
+
+	<!-- PLATO, "PLAteform Tsi Online", has for aim to offer a set of tools to researchers for :<br> -->
+	<!-- <ul> -->
+	<!--   <li> improving the publications impact factor by putting online companion paper, examples, <a href="{%url vpages%}">...</a></li> -->
+	<!--   <li> sustaining non-permanents work by setting online tools like source codes, binaries, libraries, <a href="{%url sources_codes%}">...</a></li> -->
+	<!--   <li> sharing data like database, test set, ...</li> -->
+	<!-- </div> -->
+	{%if request.session.login%}
+	<div id="blockkkk">
+	  <h3>{%if request.session.lang == 'en'%}PLATO - TSI presentation{%else%}Présentation de PLATO - TSI{%endif%}</h3>
+	 <p style="font-size:150%;text-align:center;line-height: 1.2;">{%if request.session.lang == 'en'%} Welcome to PLATO, the Plateform TSI Online. You are on the TSI network where you can manage accounts, add companion papers, tools and data {%else%} Bienvenue sur PLATO, la plate-forme de TSI en ligne. Vous êtes sur le réseau de TSI où vous pouvez ajouter gérer votre compte, ajouter des "companion papers", des outils et des données{%endif%}
+		  </p>
+	  
+	</div>
+	{%endif%}
+	<div id="blockkk">
+
+	  <h3> {%if request.session.lang == 'en'%}News{%else%}Nouveautées{%endif%} </h3>
+	  <br>
+		<h4> {%if request.session.lang == 'en'%}Lastest publications{%else%}Dernières publications{%endif%} </h4>
+		<ul>
+		  {%for a in lp%}
+
+		  {%if a.abstract%}
+		  <li><a href="{%url vpage a.id_page%}">{{a.titre}}</a>, 
+			{%else%}
+			<li>{{a.titre}},
+			  {%endif%}
+
+			  <i> {%for au in a.author.all%}
+				{%if au.id_user%} <a href="{%url usr au.id_user.login%}"> {{au.fstnm_i}}. {{au.nm}}</a>,
+				{%else%}{{au.fstnm_i}}. {{au.nm}}, 
+				{%endif%}
+				{%endfor%}</i> 
+			  {%if a.conf_raw%}{{a.conf_raw}}, {%endif%}
+			  <b> {%if a.mois%}{{a.mois}}{%endif%} {%if a.annee%}{{a.annee}}{%endif%}</b> 
+			  {%if a.id_article %} <a href="/util/download/{{a.id_article.id_file}}"> [PDF]</a>{%endif%} 
+			</li>
+			{%endfor%}
+			<a href="/publi/" style="font-size:300%;"> ... </a>
+		</ul>
+
+
+		<br>
+		  <h4> {%if request.session.lang == 'en'%}Lastest tools{%else%}Derniers outils{%endif%} </h4>
+		  <ul>
+			{%for a in lt%}
+			<li><a href="{%url vcode a.id_tool%}">{{a.name_tool}}</a>, <i>
+				{%for au in a.get_tool_author%}
+				{%if au.id_user%}
+				<a href="{%url usr au.id_user.login%}">{{au.fstnm_i}} {{au.nm}}</a>,
+				{%else%}{{au.fstnm_i}} {{au.nm}},
+				{%endif%}
+				{%endfor%}</i>  <b>{{a.date_creation}} </b><!-- , (<small>{%for kw in a.KW.all%}<a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}</small>) --></li>
+			{%endfor%}
+			<a href="/app/" style="font-size:300%;"> ... </a>
+		  </ul>
+
+		  <br>
+			<h4> {%if request.session.lang == 'en'%}Lastest objects{%else%}Dernières données{%endif%}</h4>
+			<ul>
+			  {%for a in lef%}
+			  <li><a href="{%url files a.id_ensfile%}">{{a.name_ensfile}}</a>,<i> {{a.type_ens_file}}</i>, <b> {{a.date_creation}} </b></li>
+			  {%endfor%}
+			  <a href="/data/" style="font-size:300%;"> ... </a>
+			</ul>
+
+		  <br>
+			<h4> {%if request.session.lang == 'en'%}Lastest Demos{%else%}Dernières démos{%endif%}</h4>
+			<ul>
+			  {%for a in ld%}
+			  <li><a href="{%url vdemo a.id_demo%}">{{a.name_demo}}</a>,<b> {{a.date_creation}} </b></li>
+			  {%endfor%}
+			  <a href="/demo/" style="font-size:300%;"> ... </a>
+			</ul>
+
+
+
+	</div>
+
+
+  </div> <!-- End content -->
+
+  {% endblock %}

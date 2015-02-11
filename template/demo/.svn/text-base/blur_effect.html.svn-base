@@ -1,0 +1,35 @@
+{% extends 'demo/demo_template.html' %}
+  {%block head_js%}
+<script type="text/javascript" src="/users/static/js/highslide/highslide.js"></script>
+<script type="text/javascript">
+    hs.graphicsDir = '/users/static/js/highslide/graphics/';
+</script>
+{%endblock%}
+{%block titre%} PIL contour filter {%endblock%}
+{%block autors%} PIL{%endblock%}
+{%block description%}<p> Description : <br>contour filter  <br></p>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}{%endblock%}
+<br>
+  {%block input%}
+
+ <form enctype="multipart/form-data" action="{%url blur_effect%}" method="post">{% csrf_token %}
+<div id="selection_input">
+	<p style="font-size:150%;">Input image : <input type="file" name="input"/> </p><br>
+<input type="submit" id="id_blur_effect" name="blur_effect" value="    Run    "/>
+</div>
+<div id="fiche" style="min-height:500px;">
+<div id="lefo">
+<div class="figurebox">
+	  <div id="show_selection_input"> {{example|safe}} </div>
+</div>
+</div>
+<div id="lefo">
+<div class="figurebox">
+	  <div id="results">{{response|safe}}</div>
+</div> 
+</div> 
+</div> 
+
+</form>
+{%endblock%}
+  {%block resultat%} {%endblock%}

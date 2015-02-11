@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+{% block head_title %}}Add demo{%endblock%}
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+
+{%block title%} Add Demo{%endblock%}
+{%autoescape off%}
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+{%include "asterix.html"%}
+<br>
+
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url add_demo demo.id_demo%}" method="post">{% csrf_token %}
+
+  <table align="center">
+
+	{%for field in form%}
+	<tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>	
+	{%endfor%}
+
+	<tr> <th>Ajoutez des fichiers mutimédias</th><td><input type="file" name="figures" multiple="multiple" onchange="previmg(this)"//><td></tr>
+	  <tbody id="img_preview"></tbody>
+	
+  </table>
+{%include "validate.html"%}
+</form>
+</div>
+
+
+{%endblock%}
+{%endautoescape%}

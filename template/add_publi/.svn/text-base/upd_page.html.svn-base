@@ -1,0 +1,72 @@
+{%extends 'base.html'%}
+
+{% block head_title %}{%if request.session.lang == 'en'%}Update page{%else%}Actualiser une publication{%endif%}{% endblock %}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+
+{%block title%}{%if request.session.lang == 'en'%} Update publication page{%else%} Actualiser une page de publication {%endif%}{%endblock%}
+
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+{%include "asterix.html"%}
+<br>
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url upd_page page.id_page%}" method="post">{% csrf_token %}
+
+  <table align="center">
+    <tr><th><label for="id_title">{%if request.session.lang == 'en'%}Title{%else%}Titre{%endif%}</label></th><td> {{page.titre}}</td></tr>
+	
+    <tr><th>{%if request.session.lang == 'en'%}Authors{%else%}Auteurs{%endif%}</th><td>{%for a in page.author.all%}{{a.fstnm_i}}. {{a.nm}}, {%endfor%}</td>		
+    <tr><th>{%if request.session.lang == 'en'%}Conference/Publication{%else%}Conférence/Journal{%endif%}</th>	<td>{{page.conf_raw}} </td>
+	
+    <tr><th>{%if request.session.lang == 'en'%}Year{%else%}Année{%endif%}</th><td> {{page.annee}}</td></tr>
+    <tr><th>{%if request.session.lang == 'en'%}Month{%else%}Mois{%endif%}</th><td> {{page.mois}}</td></tr>
+    <tr><th><label for="id_abstract">{{form.abstract.label}}</label></th><td> {{form.abstract}}</td></tr>
+
+    <tr><th><label for="id_algo">{{form.algo.label}}<br><a href="#" onclick="n_algo()">New Code source?</a></label></th><td> {{form.algo}}</td></tr>
+    <tbody bgcolor="LightGrey" id="add_algo" style="display:none"></tbody>
+
+	<tr><th><label for="id_demo">{{form.demo.label}}</label></th><td> {{form.demo}}</td></tr>
+				<tr><th><a href="#" onclick="ensfile_publi({{page.id_page}})">Linked to medias ?</a></th><td></td></tr>
+			<tbody id="ensfilepubli" style="display:none"></tbody>
+
+	{%if page.id_article%}
+	<tr><th><label for="id_article">Article</label> </th><td> <div id="change_article"> {{page.id_article.name_file}} <input type="button" value="X" onclick="new_article({{page.id_page}},{{page.id_article.id_file}})"></div></td></tr>
+	{%else%}
+	<tr><th><label for="id_article">Article</label> </th><td> <input type='file' name='form_page-article' id='id_form_page-article' /></td></tr>
+	{%endif%}
+
+	{%if page.id_presentation%}
+  	<tr><th><label for="id_prez">Presentation</label> </th><td> <div id="change_prez"> {{page.id_presentation.name_file}} <input type="button" value="X" onclick="new_prez({{page.id_page}},{{page.id_presentation.id_file}})"></div></td></tr>
+	{%else%}
+	<tr><th><label for="id_prez">Presentation</label> </th><td><input type='file' name='form_page-prez' id='id_form_page-prez' /></td></tr>
+	{%endif%}
+	
+	{%for m in page.figures.all%}
+	   <tr id="change_file_{{m.id_file}}"><td><label for="id_files_{{m.id_file}}"></label>{%if request.session.lang == 'en'%}Caption{%else%}Légende{%endif%} : <input type="text" name="legende_{{m.id_file}}" {%if m.get_publi_caption%}value="{{m.get_publi_caption}}"{%endif%}></td><td> Figure :{%if m.type_file.id_type_file == 1%}<img height="40px" src="/root/{{m.show_thumb}}"> {%elif m.type_file.id_type_file == 2%}<audio controls="controls" src="/root/{{m.path}}"> </audio> {%endif%} {{m.name_file}}  <input type="button" value="X" onclick="new_files({{page.id_page}},{{m.id_file}})"></td></tr>
+	{%endfor%}
+	   
+	<tr> <th> {%if request.session.lang == 'en'%}Add Multimedia{%else%}Ajoutez des fichiers multimédia{%endif%}</th> <td><input type="file" name="multimedia" multiple="multiple" onchange="previmg(this)"/><td></tr>
+				  <tbody id="img_preview"></tbody>
+
+  	<tr><th><label for="id_gpe"> {{form.gpe.label}}</label></th><td> {{form.gpe}}</td></tr>
+	<tr><th><label for="id_links"> {{form.links.label}}<br>{{form.links.help_text|safe}}</label></th><td> {{form.links}}</td></tr>
+
+	<tr><th><label for="id_form_page-KW">{{form.KW.label}}<br>{{form.KW.help_text|safe}}</label></th>
+		<td> {{form.KW}}</td>
+		<div id="autocomplete_KW_choices" class="autocomplete"></div>
+		<script>new Ajax.Autocompleter("id_form_page-KW", "autocomplete_KW_choices", "{%url autoKW 'form_page' %}", { tokens: ','});</script>
+
+  </table>
+   {#%include "auth.html"%#}
+{%include "validate.html"%}
+</form>
+</div>
+
+
+{%endblock%}

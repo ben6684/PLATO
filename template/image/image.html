@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}Images Files{%else%}Fichiers d'images{%endif%} {% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}PLATO Image content{%else%}Contenus d'images sur PLATO{%endif%}
+{% endblock%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+<div id="contentbox">
+    <ul>
+        <li> <a href="{%url images 'generic'%}">{%if request.session.lang == 'en'%}Browse generic image corpus</a> (any kind of images){%else%} Feuilleter les corpus d'images génériques</a> (N'importe quel type d'images) {%endif%}</li> 
+		<li> <a href="{%url images 'medical'%}">{%if request.session.lang == 'en'%}Browse medical image corpus{%else%}Feuilleter les corpus d'images médicales{%endif%}</a> </li> 
+		<li> <a href="{%url images 'satellite'%}">{%if request.session.lang == 'en'%}Browse satellite images by satellite{%else%}Feuilleter les corpus d'images satellites{%endif%}</a> </li>
+  
+    </ul>
+</div>
+
+
+ {% endblock %}

@@ -1,0 +1,65 @@
+
+{% extends 'base.html' %}
+{% block head_title %}{%if request.session.lang == 'en' %}New projet{%else%}Nouveau projet{%endif%} {% endblock %}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+
+
+{% block title %}{%if request.session.lang == 'en' %} Create a PLATO project{%else%} Créer un projet sur PLATO{%endif%}{% endblock %}
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+{%if request.session.lang == 'en' %}
+<p>
+It's very import that you understand the principle behind this step : <br>
+<ul>
+<li> It will only create a project page on PLATO </li>
+<li> It will create a folder on /tsi/plato/plato_projects/, linked to a unix account (otherwise everyone will be able to see the files in it)</li>
+<li> A public project means that everyone will be able to see the group information and to add themself </li>
+<li> A private project won't appear and only the manager will be able to add members </li>
+</ul>
+</p>
+{%else%}
+<p>
+Il est très important de comprendre le principe derrière cette étape : <br>
+<ul>
+<li> Seule une page projet sera créer sur PLATO, et un mail sera envoyé pour créer un groupe unix avec les membres </li>
+<li> Un dossier à /tsi/plato/plato_projects/ sera créer liéer à un compte UNIX</li>
+<li> Un projet publique implique que n'importe qui sera capable de voir les informations liéer au projet et non pas seulement les membres. De plus chacun pourra se rajouter sur ce projet</li>
+<li> Un projet privé implique que seuls les membres peuvent voir les informations liées au projet et que seul le gestionnaire du projet peux rajouter des membres</li>
+</ul>
+</p>
+{%endif%}
+
+{%include "asterix.html"%}
+
+<div id="content">
+
+  <form action="{%url usr_ngrp log%}" enctype="multipart/form-data" method="post"> {% csrf_token %}
+  <table align="center">
+		{%for field in form%}
+		  {%if field.label == "* Keywords" or field.label == "* Mots clefs" %}
+			    <tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td>
+			    <td> {{field}}</td>
+			     <div id="autocomplete_KW_choices" class="autocomplete"></div>
+			     <script>new Ajax.Autocompleter("id_form_group-KW", "autocomplete_KW_choices", "{%url autoKW 'form_group' %}", { tokens: ','});</script>
+		    {%else%}		
+			     <tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>
+		    {%endif%}
+		
+		  {%endfor%}			
+
+	<tr>
+	</tr>
+  </table>
+		{%include "validate.html"%}
+  </form>
+
+</div> <!-- End content -->
+
+{% endblock %}

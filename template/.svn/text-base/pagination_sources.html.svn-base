@@ -1,0 +1,21 @@
+
+<div class="pagination">
+    <span class="step-links">
+ 
+        {% if Sources.number > 1  %}
+          <a href="?page=1"> << first </a>  |  
+        {% endif %}  
+        {% if Sources.has_previous %}
+            <a href="?page={{ Sources.previous_page_number }}"> < previous</a>
+        {% endif %}
+        <span class="current">
+            |  Page {{ Sources.number }} of {{ Sources.paginator.num_pages }}  | 
+        </span>
+        {% if Sources.has_next %}
+             <a href="?page={{ Sources.next_page_number }} ">next > </a> 
+        {% endif %}
+         {% if Sources.number < Sources.paginator.num_pages %}
+            |  <a href="?page={{ Sources.paginator.num_pages }}">last >> </a>
+        {% endif %}
+    </span>
+</div>

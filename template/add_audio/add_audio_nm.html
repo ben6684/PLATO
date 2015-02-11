@@ -1,0 +1,27 @@
+{%extends 'base.html'%}
+{% block head_title %} Add audio data {% endblock %}
+
+{%block title%} Add an audio something{%endblock%}
+
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+
+<div id="contentbox">
+  <form enctype="multipart/form-data" action="{%url add_audio_nm%}" method="post">{% csrf_token %}
+  <table align="center">
+	<tr> <td> <b>* Files :</b>  </td><td><input type="file" name="files" multiple="multiple" /><td></tr>
+
+	<tr>
+	{{form}}
+	</tr>
+  </table>
+  {%include "auth.html"%}
+  <p align="center"><input type="submit" value="Validate the formular"/></p>
+</form>
+
+  
+</div>
+
+{%endblock%}

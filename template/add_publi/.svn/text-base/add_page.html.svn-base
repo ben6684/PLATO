@@ -1,0 +1,89 @@
+{%extends 'base.html'%}
+
+{% block head_title %} {%if request.session.lang == 'en'%}Add Report{%else%}Ajoutez un rapport{%endif%}{% endblock %}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+{%endblock%}
+
+{%block title%}{%if request.session.lang == 'en'%} Add Companion Paper or Report that will not be published{%else%}Ajoutez une publication d'accompagnement ou un rapport non publiable{%endif%}{%endblock%}
+
+{%block content%}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+<p align="center">
+{%if request.session.lang == 'en'%}
+Important : <br>
+<ul align="center" style="list-style-type: none;">
+<li> Creating a Report here will not update the Telecom database ! </li>
+<li> PLATO imports the telecom publication database ! </li>
+<li> Creating a report here is for intern use </li>
+<li> <font color="red"> EVERY publication should be added on :  </font><br>
+	<span style="font-size:150%;"><b>		<a href="https://service.tsi.telecom-paristech.fr/cgi-bin/valipub/soumission.cgi">	https://service.tsi.telecom-paristech.fr/cgi-bin/valipub/soumission.cgi</a> </b></span></li>
+</ul> 
+{%else%}
+Important : <br>
+<ul align="center" style="list-style-type: none;">
+<li> Créer un rapport ici ne mettra pas à jour la base de données de publications de Télécom ! </li>
+<li> PLATO importe les publications de télécom pas l'inverse ! </li>
+<li> Créer un rapport ici est uniquement pour un usage interne </li>
+<li> <font color="red"> CHAQUE publication doit être ajoutée sur :  </font><br>
+	<span style="font-size:150%;"><b>		<a href="https://service.tsi.telecom-paristech.fr/cgi-bin/valipub/soumission.cgi">	https://service.tsi.telecom-paristech.fr/cgi-bin/valipub/soumission.cgi</a> </b></span></li>
+</ul> 
+{%endif%}
+</p>
+
+
+<br>
+{%include "asterix.html"%}
+<br>
+
+<div id="contentbox" >
+  <form enctype="multipart/form-data" action="{%url add_publi%}" method="post">{% csrf_token %}
+
+  <table align="center">
+    <tr><th><label for="id_title">{{form.title.label}}</label></th><td> {{form.title}}</td></tr>
+	
+    <tr><td><b><label for="id_author">{{form.author.label}}</b><br>{{form.author.help_text|safe}}</label></td>
+	<td> {{form.author}}</td>
+	<div id="autocomplete_author_choices" class="autocomplete"></div>
+	<script>new Ajax.Autocompleter("id_form_page-author", "autocomplete_author_choices", "{%url autoAuthor%}", { tokens: ','});</script>
+		
+    <tr><td><label for="id_conference"><b>{{form.conference.label}}</b><br>{{form.conference.help_text|safe}}</label></td>
+	<td> {{form.conference}}</td>
+	
+    <tr><th><label for="id_annee">{{form.annee.label}}</label></th><td> {{form.annee}}</td></tr>
+    <tr><th><label for="id_mois">{{form.mois.label}}</label></th><td> {{form.mois}}</td></tr>
+    <tr><th><label for="id_abstract">{{form.abstract.label}}</label></th><td> {{form.abstract}}</td></tr>
+    <tr><th><label for="id_article">{{form.article.label}}</label></th><td> {{form.article}}</td></tr>
+    <tr><th><label for="id_prez">{{form.prez.label}}</label></th><td> {{form.prez}}</td></tr>
+	<tr> <th> Add Multimedia</th> <td><input type="file" name="multimedia" multiple="multiple" onchange="previmg(this)"/><td></tr>
+				<!-- <tr> <td id="img_preview"></td><td id="legendes"></td></tr>  -->
+				  <tbody id="img_preview"></tbody>
+				<!--img id="blah" src="#" alt="your image"/-->
+	<tr><th><label for="id_gpe"> {{form.gpe.label}}</label></th><td> {{form.gpe}}</td></tr>
+	<tr><th><label for="id_links"> {{form.links.label}}</label></th><td> {{form.links}}</td></tr>
+
+    <tr><th><label for="id_algo">{{form.algo.label}}</label></th><td> {{form.algo}}<a href="#" onclick="n_algo()">New Code source?</a></td></tr>
+    <tbody bgcolor="LightGrey" id="add_algo" style="display:none"></tbody>
+					<tr><th><label for="id_demo">{{form.demo.label}}</label></th><td> {{form.demo}}</td></tr>
+
+					<tr><th><a href="#" onclick="ensfile_publi()">Linked to medias ?</a></th><td></td></tr>
+					<tbody id="ensfilepubli" style="display:none"></tbody>
+	<tr><th><label for="id_form_page-KW">{{form.KW.label}}</label></th>
+		<td> {{form.KW}}</td>
+		<div id="autocomplete_KW_choices" class="autocomplete"></div>
+		<script>new Ajax.Autocompleter("id_form_page-KW", "autocomplete_KW_choices", "{%url autoKW 'form_page' %}", { tokens: ','});</script>
+ 
+  
+  </table>
+   {#%include "auth.html"%#}
+			  {%include "validate.html"%}
+			
+</form>
+</div>
+
+{%endblock%}

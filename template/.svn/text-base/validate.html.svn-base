@@ -1,0 +1,5 @@
+{%if request.session.lang == 'en'%}
+  <p align="center"><input type="submit" value="Validate the form"/></p>
+{%else%}
+  <p align="center"><input type="submit" value="Validez le formulaire"/></p>
+{%endif%}

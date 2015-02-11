@@ -1,0 +1,20 @@
+<div class="pagination">
+    <span class="step-links">
+ 
+        {% if Img.number > 1  %}
+          <a href="?page=1"> << first </a>  |  
+        {% endif %}  
+        {% if Img.has_previous %}
+            <a href="?page={{ Img.previous_page_number }}"> < previous</a>
+        {% endif %}
+        <span class="current">
+            |  Page {{ Img.number }} of {{ Img.paginator.num_pages }}  | 
+        </span>
+        {% if Img.has_next %}
+             <a href="?page={{ Img.next_page_number }} ">next > </a> 
+        {% endif %}
+         {% if Img.number < Img.paginator.num_pages %}
+            |  <a href="?page={{ Img.paginator.num_pages }}">last >> </a>
+        {% endif %}
+    </span>
+</div>

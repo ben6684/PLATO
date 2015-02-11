@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block head_title %}{%if request.session.lang == 'en'%} Audio Files {%else%} Fichiers Audios {%endif%} {% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}Sound content{%else%}Contenu audio{%endif%}
+{% endblock%}
+
+{% block content %}
+<br>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+<br>
+<div id="contentbox">
+    <ul>
+		  {%if request.session.lang == 'en'%}
+        <li> <a href="{%url audio_corpus%}"> Sound gathering</a> (album, corpus, etc..) </li>
+		  <br>
+	   <li> Browse the sound files by categories:</li>        
+           <ul>
+			  <li>
+                    <a href="{%url sound 'all'%}">All musical sounds</a> (with no sorting of all sort) ,
+                </li>                
+                <li> <a href="{%url sound 'ensemble'%}">
+                    Multiple instruments sound</a> (can be songs, tracks or exerpts),
+                </li>
+                <li> <a href="{%url sound 'solo'%}">
+                    Solo sound</a> (just one instrument),
+                </li>
+
+                <li> <a href="{%url sound 'isolated'%}">
+                    Isolated notes excerpts</a>,
+                </li>
+                <li> <a href="{%url sound 'note'%}">
+                    One note excerpts</a>,
+                </li>
+            </ul>
+      <li> <a href="{%url sound 'non'%}"> 
+                    All non musical sounds</a>, including radio/TV streams, and environmental sounds,
+		</li>
+		{%else%}
+        <li> <a href="{%url audio_corpus%}"> Ensemble de sons</a> (albums, corpus, etc..) </li>
+		  <br>
+	   <li> Selectionnez les fichiers sons par catégories:</li>        
+           <ul>
+			  <li>
+                    <a href="{%url sound 'all'%}">Tous les ficheirs musicaux</a> (Sans filtrage d'acune sorte) ,
+                </li>                
+                <li> <a href="{%url sound 'ensemble'%}">
+                    Fichiers sons avec de multiple instruments</a> (peut être des chansons, des pistes ou des extraits),
+                </li>
+                <li> <a href="{%url sound 'solo'%}">
+                    Fichiers de solos</a> (juste un instrument),
+                </li>
+
+                <li> <a href="{%url sound 'isolated'%}">
+                    Extraits de notes</a>,
+                </li>
+                <li> <a href="{%url sound 'note'%}">
+                    Extraits d'une seule note</a>,
+                </li>
+            </ul>
+      <li> <a href="{%url sound 'non'%}"> 
+                    Fichiers non musicaux</a>, incluant de flux radio/TV ou des sons d'environnement
+		</li>
+
+		{%endif%}
+    </ul>
+</div>
+
+
+ {% endblock %}

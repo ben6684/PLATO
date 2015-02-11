@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/project/mmm/!svn/ver/2271/MMM/trunk/plato/plato
+END
+settings.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/project/mmm/!svn/ver/2089/MMM/trunk/plato/plato/settings.py
+END
+form.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/project/mmm/!svn/ver/2233/MMM/trunk/plato/plato/form.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/project/mmm/!svn/ver/2262/MMM/trunk/plato/plato/models.py
+END
+settings.pyc
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/project/mmm/!svn/ver/2271/MMM/trunk/plato/plato/settings.pyc
+END
+google_analytics.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/project/mmm/!svn/ver/2103/MMM/trunk/plato/plato/google_analytics.py
+END
+urls.py
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/project/mmm/!svn/ver/2026/MMM/trunk/plato/plato/urls.py
+END
+models.pyc
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/project/mmm/!svn/ver/2271/MMM/trunk/plato/plato/models.pyc
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/project/mmm/!svn/ver/2021/MMM/trunk/plato/plato/admin.py
+END

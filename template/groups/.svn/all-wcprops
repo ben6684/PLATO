@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/project/mmm/!svn/ver/2055/MMM/trunk/template/groups
+END
+new_group.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/project/mmm/!svn/ver/1338/MMM/trunk/template/groups/new_group.html
+END
+group.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/project/mmm/!svn/ver/2055/MMM/trunk/template/groups/group.html
+END
+update_group.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/project/mmm/!svn/ver/1337/MMM/trunk/template/groups/update_group.html
+END
+groups.html
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/project/mmm/!svn/ver/1356/MMM/trunk/template/groups/groups.html
+END

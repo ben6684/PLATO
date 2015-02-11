@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+  {% block head_title %}{%if request.session.lang == 'en'%}  Tools information {%else%} Informations des outils {%endif%}{% endblock %}
+
+  {%block head_js%}
+  <script type="text/javascript" src="/users/static/js/del.js"></script>
+  <script type="text/javascript" src="/users/static/js/prototype.js"></script>
+  <script type="text/javascript" src="/users/static/js/view.js"></script>
+  {%endblock%}
+  {% block title %}
+  {%if request.session.lang == 'en'%}Tools information{%else%}Informations des outils{%endif%}
+  {% endblock%}
+
+  {% block content %}
+  
+  <br />
+	{% if error_message %}
+	<p><strong>{{ error_message }}</strong></p>
+	{% endif%}
+	<br />
+	  
+	  {% for a in src.object_list %}
+	  <div id="object">
+		<h3><a href="{%url vcode a.id_tool%}">{{a.name_tool}} </a></h3>
+		<div id="objectlogo">
+		  <img src="/users/static/images/application.png">
+		</div>
+		<div id="soundcontent">
+		  
+		  
+		  <ul>
+			{%if request.session.lang == 'en'%}
+			{%if a.type_tool%} <li>Tool type :  {{a.type_tool.nm_type_tool}}</li>{%endif%}
+			{%if a.licence%}<li>License :  {{a.licence.nm_license}}</li>{%endif%} 
+			{%if a.webpage_tool%}{%ifnotequal a.webpage_tool 'None'%}<li> Webpage : <a href="{{a.webpage_tool}}">{{a.webpage_tool}}</a></li>{%endifnotequal%}{%endif%}
+			{%if a.KW.all%}<li>Keywords : {%for kw in a.KW.all%} <a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}</li> {%endif%}
+			{%else%}
+			{%if a.type_tool%} <li>Type d'outil :  {{a.type_tool.nm_type_tool}}</li>{%endif%}
+			{%if a.licence%}<li>Licence :  {{a.licence.nm_license}}</li>{%endif%} 
+			{%if a.webpage_tool%}{%ifnotequal a.webpage_tool 'None'%}<li> Page web : <a href="{{a.webpage_tool}}">{{a.webpage_tool}}</a></li>{%endifnotequal%}{%endif%}
+			{%if a.KW.all%}<li>Mots clefs : {%for kw in a.KW.all%} <a href="/search?KW={{kw}}">{{kw}}</a>, {%endfor%}</li> {%endif%}
+			{%endif%}						
+		  </ul>
+		</div>
+		<div id="soundcontentmore">	 
+		  <ul>
+			{%ifnotequal a.desc_tool None%} <li> Description :{{a.desc_tool|safe}}</li>{%endifnotequal%}
+
+			{%ifequal a.manager me%}
+			<input type="button" onclick="self.location.href='{%url upd_tool a.id_tool%}'" {%if request.session.lang == 'en'%}value="Modify"{%else%}value="Modifiez"{%endif%}> <input type="button" {%if request.session.lang == 'en'%}value="Delete"{%else%}value="Supprimez"{%endif%} onclick="del_tool({{a.id_tool}})">
+			{%endifequal%}
+			{%ifequal a.manager.id_boss me.id_user%}
+			<input type="button" onclick="self.location.href='{%url upd_tool a.id_tool%}'" {%if request.session.lang == 'en'%}value="Modify"{%else%}value="Modifiez"{%endif%}> <input type="button" {%if request.session.lang == 'en'%}value="Delete"{%else%}value="Supprimez"{%endif%} onclick="del_tool({{a.id_tool}})">
+			{%endifequal%}
+				
+		  </ul>
+
+		</div>
+		<div id="objectbottom">
+		  {%if request.session.lang == 'en'%}
+		  Created the <b>{{a.date_creation|date:"j M Y"}}</b> by <a href="{%url usr a.manager.login%}">{{a.manager.fstnm_person}} {{a.manager.nm_person}}</a> {%ifnotequal a.date_creation|date:"jny" a.date_modification|date:"jny"%} - last modified : {{a.date_modification|date:"j M Y"}}{%endifnotequal%}
+		  {%else%}
+		  Créé le  <b>{{a.date_creation|date:"j M Y"}}</b> par <a href="{%url usr a.manager.login%}">{{a.manager.fstnm_person}} {{a.manager.nm_person}}</a> {%ifnotequal a.date_creation|date:"jny" a.date_modification|date:"jny"%} - modifé le : {{a.date_modification|date:"j M Y"}}{%endifnotequal%}
+		  {%endif%}
+		</div>
+	  </div>
+	  {%endfor%}
+
+	  {%include "pagination.html" with OBJ=src%}
+	  
+	  {% endblock %}

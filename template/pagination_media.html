@@ -1,0 +1,21 @@
+
+<div class="pagination">
+    <span class="step-links">
+ 
+        {% if Audio.number > 1  %}
+          <a href="?page=1"> << first </a>  |  
+        {% endif %}  
+        {% if Audio.has_previous %}
+            <a href="?page={{ Audio.previous_page_number }}"> < previous</a>
+        {% endif %}
+        <span class="current">
+            |  Page {{ Audio.number }} of {{ Audio.paginator.num_pages }}  | 
+        </span>
+        {% if Audio.has_next %}
+             <a href="?page={{ Audio.next_page_number }} ">next > </a> 
+        {% endif %}
+         {% if Audio.number < Audio.paginator.num_pages %}
+            |  <a href="?page={{ Audio.paginator.num_pages }}">last >> </a>
+        {% endif %}
+    </span>
+</div>

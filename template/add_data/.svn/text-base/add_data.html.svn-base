@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+  {% block head_title %} {%if request.session.lang == 'en'%}Add data{%else%}Ajoutez des données{%endif%}{% endblock %}
+
+
+  {% block title %}
+  {%if request.session.lang == 'en'%}Add data on PLATO{%else%}Ajoutez des données sur PLATO{%endif%}
+  {% endblock%}
+
+  {% block content %}
+  <br />
+	{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+	<br />
+{%if request.session.lang == 'en'%}
+	  <p align="center"><a href="{%url help_add_data%}"><b>Need help ? </b></a></p>
+<br />
+<br />
+
+	  <div id="contentbox">
+		<div id="fiche-smallleft">
+		  <a href="{%url add_files%}"> Add files to existing data </a> <br /> <br />
+			<i> (the gathring already exists and you just want to add some files)</i>
+			<br />
+			  <br />
+				<a href="{%url add_files%}"><img src="/users/static/images/add_data1.png"></a>
+		</div>
+		<div id="fiche-smallleft">
+		  <a href="{%url add_new_files%}"> Add new data </a> <br /> <br />
+			<i>(create a new gathering from a set of files)</i>
+			<br />
+			  <br />
+				<a href="{%url add_new_files%}"><img src="/users/static/images/add_data2.png"></a>
+		</div>
+		<div id="fiche-smallleft">
+		  <a href="{%url add_new_files_from_plato%}">Fill formular for data on PLATO</a> <br /> <br />
+		  <i> All the data have to be in a single folder on /tsi/plato_/plato_tmp/ </i>
+			<br />
+			  <br />
+				  <a href="{%url add_new_files_from_plato%}"><img src="/users/static/images/add_data3.png"></a>
+		</div>
+	  </div>
+{%else%}
+	  <p align="center"><a href="{%url help_add_data%}"><b>Besoin d'aide ? </b></a></p>
+<br />
+<br />
+
+	  <div id="contentbox">
+		<div id="fiche-smallleft">
+		  <a href="{%url add_files%}">Ajoutez des fichiers à un ensemble de fichiers déjà existant</a> <br /> <br />
+			<i> (Vous avez déjà rajouté des données mais voulez en rajouter d'autres)</i>
+			<br />
+			  <br />
+				<a href="{%url add_files%}"><img src="/users/static/images/add_data1.png"></a>
+		</div>
+		<div id="fiche-smallleft">
+		  <a href="{%url add_new_files%}"> Ajoutez un nouvel ensemble de données </a> <br /> <br />
+			<i>(Créez un nouvel ensemble de données)</i>
+			<br />
+			  <br />
+				<a href="{%url add_new_files%}"><img src="/users/static/images/add_data2.png"></a>
+		</div>
+		<div id="fiche-smallleft">
+		  <a href="{%url add_new_files_from_plato%}">Formulaire pour des données déjà sur PLATO</a> <br /> <br />
+		  <i> Si vous avez déjà ajouté des fichiers sur /tsi/plato/plato_tmp/ (par ganga (Window) ou cp (Linux)) et que vous voulez les ajouter définitivement à PLATO</i>
+			<br />
+			  <br />
+				  <a href="{%url add_new_files_from_plato%}"><img src="/users/static/images/add_data3.png"></a>
+		</div>
+	  </div>
+{%endif%}
+
+	  {% endblock %}

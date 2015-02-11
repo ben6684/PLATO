@@ -1,0 +1,3 @@
+
+<a href="#" onclick="popup_report()"><p align="center"><b>Rapportez un problème </b></p></a>
+<!-- <input type="button" value="report" onclick="popup_report()"> -->

@@ -1,0 +1,11 @@
+  <ul class="navbar">
+
+	  <li class="itembar"><a class="linkbar" href="{%url idx%}">Home</a></li>
+		<li class="itembar"><a class="linkbar" href="{%url projects%}">Projects</a></li>
+		<li class="itembar"><a class="linkbar" href="{%url usrs%}">Members</a></li>
+		  <li class="itembar"><a class="linkbar" href="{%url sources_codes%}">Tools</a></li>
+		  <li class="itembar"><a class="linkbar" href="{%url vpages%}">Publications</a></li>
+	<li class="itembar"><a class="linkbar" href="{%url vdemos%}">Demo</a></li>
+		  <li class="itembar"><a class="linkbar" href="{%url data%}">Data</a></li>
+		
+	</ul>

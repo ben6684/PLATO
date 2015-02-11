@@ -1,0 +1,43 @@
+
+  <h3>Menu</h3>
+  <div id="pages-3" class="widget widget_pages">
+	
+	<ul>
+	  <li class="page_item"><a href="{%url idx%}">Home</a></li>
+	  {%if request.session.actif%}
+	  {%if request.session.login%}
+	  <li class="page_item"><a href="{%url usr request.session.login%}">My account</a></li>
+	  {%endif%}
+	  {%endif%}
+	  <br/>
+		<li class="page_item"><a href="{%url projects%}">Projects</a></li>
+		<li class="page_item"><a href="{%url usrs%}">Members</a></li>
+		<br/>
+		  <li class="page_item"><a href="{%url sources_codes%}">Tools</a></li>
+		  <li class="page_item"><a href="{%url vpages%}">Publications</a></li>
+
+		  <li class="page_item"><a href="{%url vdemos%}">Demos</a></li>
+		  <li class="page_item"><a href="{%url data%}"> Data</a>
+			<ul class="children">
+			  <li><a href="{%url audio%}">Audios</a></li>
+			  <li><a href="{%url image%}">Images</a> </li>
+			  <li><a href="{%url videos%}">Videos</a></li>
+			  <li><a href="{%url 3D%}">3D objects</a></li>
+			  <li><a href="{%url multimodal%}">Multimodals</a></li>
+			</ul>
+		  </li>	
+		  {%if request.session.actif%}
+		  {%if request.session.login%}
+		  <br/>
+			<li class="page_item"><a href="{%url add_data%}">Add data</a></li>
+			<li class="page_item"><a href="{%url add_app%}">Add tool</a> </li>
+			<li class="page_item"><a href="{%url add_publi%}">Add companion page</a></li>
+			<br/>
+			  <li><a href="{%url usr_ngrp request.session.login%}">Create project</a></li>
+			  {%endif%}
+			  {%endif%}	
+			  <br/>
+				<li><a href="{%url help%}">Help</a></li>
+				<li><a href="{%url start%}">Getting started</a></li>
+	</ul>
+  </div>

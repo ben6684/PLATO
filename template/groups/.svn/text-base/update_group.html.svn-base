@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+
+{% block title %}{%if request.session.lang == 'en'%} Edit the PLATO project{%else%} Actualisez un projet PLATO{%endif%}{% endblock %}
+
+
+
+{% block content %}
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+{%include "asterix.html"%}
+<div id="content">
+
+  <form action="{%url grp_upd ngpe%}" enctype="multipart/form-data" method="post"> {% csrf_token %}
+  <table align="center">
+		{%for field in form%}
+		  {%if field.label == "* Keywords" or field.label == "* Mots clefs"%}
+			    <tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td>
+			    <td> {{field}}</td>
+			     <div id="autocomplete_KW_choices" class="autocomplete"></div>
+			     <script>new Ajax.Autocompleter("id_form_group-KW", "autocomplete_KW_choices", "{%url autoKW 'form_group' %}", { tokens: ','});</script>
+		    {%else%}		
+			     <tr><td><b>{{field.label}}</b><br>{{field.help_text|safe}}</td><td>{{field}}</td></tr>
+		    {%endif%}
+		
+		  {%endfor%}
+	<tr>
+	</tr>
+  </table>
+	  {%include "validate.html"%}
+  </form>
+
+</div> <!-- End content -->
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block head_title %} {%if request.session.lang == 'en'%}All gathering Information{%else%}Informations sur les Ensembles de données{%endif%} {% endblock %}
+
+{% block title %}
+{%if request.session.lang == 'en'%}All Corpus Information{%else%}Informations de tous les ensembles de données{%endif%}
+{% endblock%}
+
+{%block head_js%}
+<script type="text/javascript" src="/users/static/js/del.js"></script>
+<script type="text/javascript" src="/users/static/js/view.js"></script>
+<script type="text/javascript" src="/users/static/js/prototype.js"></script>
+<script type="text/javascript" src="/users/static/js/form.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js"></script>
+
+{%endblock%}
+
+{% block content %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif%}
+
+{% for s in Sources.object_list %}
+<div id="object">
+	{%include 'choose_logo.html' with s=s%}
+	<div id="formodif{{s.id_ensfile}}">
+	  {%include 'data/obj_infos.html' with s=s%}
+	  <br style="clear: left;" />
+	</div>
+</div>
+{%endfor%}
+
+{%include "pagination.html" with OBJ=Sources%}
+<br>
+ {% endblock %}
